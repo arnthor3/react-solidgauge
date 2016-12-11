@@ -4,7 +4,9 @@
   "description": "A Small React-D3 solid gauge chart inspired by amcharts",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watch",
+    "start": "webpack-dev-server --inline --hot",
+    "build": "babel src -d dist"
   },
   "repository": {
     "type": "git",
