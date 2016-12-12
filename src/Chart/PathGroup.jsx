@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { timer } from 'd3-timer';
-import { arc, area } from 'd3-shape';
-import * as ease from 'd3-ease';
+import { arc } from 'd3-shape';
 import { select, selectAll } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
-import { interpolate } from 'd3-interpolate';
 
 /*
   PropType for fill and stroke..
@@ -13,7 +9,6 @@ const fillStroke = PropTypes.shape({
   fill: PropTypes.string,
   stroke: PropTypes.string,
 });
-
 
 export default class PathGroup extends Component {
   static propTypes = {

@@ -63,10 +63,6 @@ export default class Chart extends Component {
     });
   }
   render() {
-    React.Children.forEach(this.props.children, ({ props }) => {
-      if (props.liquid && props.liquid.fill) {
-      }
-    });
     const { children, ...noChildren } = this.props;
     // Copy the props and the state to pass it down to the children
     const props = Object.assign({}, noChildren, {
