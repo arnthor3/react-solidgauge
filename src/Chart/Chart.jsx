@@ -8,12 +8,18 @@ import React, {
 import throttle from 'lodash.throttle';
 import ReactIf from './ReactIf';
 import SolidGauge from './SolidGauge';
+import cloneComponents from './cloneChildren';
 
 export default class Chart extends Component {
   static propTypes = {
     // enables listen to window width change and rerenders the chart
     // on resize
     responsive: PropTypes.bool,
+    // the chart components
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]),
   }
 
   constructor(props) {
@@ -57,7 +63,17 @@ export default class Chart extends Component {
     });
   }
   render() {
-    const passingProps = Object.assign({}, this.state, this.props);
+    React.Children.forEach(this.props.children, ({ props }) => {
+      if (props.liquid && props.liquid.fill) {
+      }
+    });
+    const { children, ...noChildren } = this.props;
+    // Copy the props and the state to pass it down to the children
+    const props = Object.assign({}, noChildren, {
+      width: this.state.width,
+      height: this.state.height,
+    });
+
     // make the chart take up the whole width and height of the parent
     const style = {
       width: '100%',
@@ -70,7 +86,7 @@ export default class Chart extends Component {
       >
         <ReactIf condition={this.state.height !== null && this.state.height !== 0}>
           <svg width="100%" height="100%">
-            <SolidGauge {...passingProps} />
+            <SolidGauge {...props} />
           </svg>
         </ReactIf>
       </div>

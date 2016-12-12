@@ -17,7 +17,7 @@
     "D3"
   ],
   "author": "arnthor3@gmail.com",
-  "license": "BSD-2-Clause",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/arnthor3/react-solidgauge/issues"
   },
