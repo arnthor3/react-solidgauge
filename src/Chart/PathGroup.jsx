@@ -28,6 +28,16 @@ export default class PathGroup extends Component {
       stroke: PropTypes.string,
     }),
   }
+
+  static defaultProps = {
+    startAngle: 0,
+    endAngle: Math.PI * 1.5,
+    background: {
+      fill: '#ccc',
+      stroke: '#999',
+    },
+  }
+
   componentDidMount() {
     const el = select(this.container).select('path.val');
     el.datum([this.props.data.value]);

@@ -48,7 +48,8 @@ render(chart, document.getElementById('app'));
 
 ### Props
 I will add more soon, like tooltip and some gradients and shadows, I will probably break this down into components when I do that.
-Name|Type|Default|Description|
+
+|Name|Type|Default|Description|
 ---|---|---|---
 responsive|boolean|true| Rerenders the chart on screen resize
 startAngle|number|0|The starting angle of the function
