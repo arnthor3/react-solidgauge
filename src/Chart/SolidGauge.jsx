@@ -5,7 +5,7 @@ import { select, selectAll } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { interpolate } from 'd3-interpolate';
 import 'd3-transition';
-import PathGroup from './PathGroup';
+import PathGroup from './PathGroup_';
 
 
 export default class SolidGauge extends Component {

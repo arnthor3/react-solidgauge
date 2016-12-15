@@ -1,9 +1,6 @@
 import React, {
   Component,
-  PropTypes,
-  Children,
-  cloneElement,
-} from 'react';
+  PropTypes } from 'react';
 
 import throttle from 'lodash.throttle';
 import ReactIf from './ReactIf';
@@ -57,6 +54,7 @@ export default class Chart extends Component {
 
   onResize() {
     const dimension = this.chart.getBoundingClientRect();
+    console.log(dimension);
     this.setState({
       width: dimension.width,
       height: dimension.height,
@@ -70,11 +68,15 @@ export default class Chart extends Component {
       height: this.state.height,
     });
 
+    // clone the children and pass in the props and state
+    const cloneChildrenWithProps = cloneComponents(this.props.children, props);
+
     // make the chart take up the whole width and height of the parent
     const style = {
       width: '100%',
       height: '100%',
     };
+
     return (
       <div
         style={style}
@@ -82,7 +84,7 @@ export default class Chart extends Component {
       >
         <ReactIf condition={this.state.height !== null && this.state.height !== 0}>
           <svg width="100%" height="100%">
-            <SolidGauge {...props} />
+            {cloneChildrenWithProps}
           </svg>
         </ReactIf>
       </div>

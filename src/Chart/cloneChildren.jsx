@@ -1,7 +1,7 @@
 import React, { Children, cloneElement } from 'react';
 
 export default (children, props) => (
-  // Clone the children and add props to components like data, width and heigth
+    // Clone the children and add props to components like data, width and heigth
     Children.map(children,
       (child) => {
         // only pass data into Components not native browser elements
