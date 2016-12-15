@@ -1,27 +1,37 @@
 import React, { PropTypes } from 'react';
 
-/*
-  A very simple component
- */
-const BackgroundPath = ({ arc, fill, stroke, cY }) => (
-  <g transform={`translate(0,${cY})`}>
-    <path
-      d={arc()}
-      fill={fill}
-      stroke={stroke}
-    />
+const Label = ({ data, fontSize, startPathCoordinates }) => (
+  <g
+    transform={`translate(${startPathCoordinates})`}
+  >
+    <text
+      style={{
+        pointerEvent: 'none',
+      }}
+      fontSize={fontSize}
+      fill={data.fill}
+      stroke={data.stroke}
+      textAnchor="end"
+      dx={-15}
+      dy={4.5}
+    >{data.label}</text>
   </g>
 );
 
-BackgroundPath.propTypes = {
-  arc: PropTypes.func,
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
+
+Label.propTypes = {
+  data: PropTypes.shape({
+    fill: PropTypes.string,
+    stroke: PropTypes.string,
+    label: PropTypes.string,
+  }),
+  fontSize: PropTypes.string,
+  startPathCoordinates: PropTypes.string,
 };
 
-BackgroundPath.defaultProps = {
+Label.defaultProps = {
   fill: '#ddd',
   stroke: '#aaa',
 };
 
-export default BackgroundPath;
+export default Label;

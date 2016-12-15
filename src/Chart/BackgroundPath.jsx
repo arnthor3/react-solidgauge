@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
   A very simple component
  */
 const BackgroundPath = ({ arc, fill, stroke, cY }) => (
-  <g transform={`translate(0,${cY})`}>
+  <g>
     <path
       d={arc()}
       fill={fill}
@@ -17,6 +17,7 @@ BackgroundPath.propTypes = {
   arc: PropTypes.func,
   fill: PropTypes.string,
   stroke: PropTypes.string,
+  cY: PropTypes.number,
 };
 
 BackgroundPath.defaultProps = {

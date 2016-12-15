@@ -12,7 +12,11 @@ export default class PathGroup extends Component {
   static propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
+    values: PropTypes.arrayOf(
+      PropTypes.shape({
 
+      }),
+    ),
     ease: PropTypes.string,
     pathWidth: PropTypes.number,
     pathMargin: PropTypes.number,
@@ -20,6 +24,7 @@ export default class PathGroup extends Component {
     endAngle: PropTypes.number,
     background: fillStroke,
     fontSize: PropTypes.string,
+    margin: PropTypes.number,
     data: PropTypes.shape({
       value: PropTypes.number,
       label: PropTypes.string,
@@ -36,33 +41,19 @@ export default class PathGroup extends Component {
     ease: 'easeBounce',
   };
 
-  componentDidMount() {
-
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-  }
-
-  animate() {
-    this.isTrue = true;
-  }
-
-  draw() {
-    this.draw();
-  }
-
   render() {
+    const height = this.props.height - 40;
     return (
       <g
+        transform="translate(0,20)"
         ref={(c) => { this.container = c; }}
       >
         {this.props.values.map((d, i) => {
           const marginAndWidth = this.props.pathWidth + this.props.pathMargin;
           const cX = (this.props.width / 2);
-          const cY = (this.props.height / 2) - (i * marginAndWidth);
+          const cY = (height / 2) - (i * marginAndWidth);
           const radius = Math.min(cX, cY);
-          const outer = 0.99 * radius;
+          const outer = radius;
 
           const thisArc = arc()
                             .outerRadius(outer)
@@ -80,16 +71,19 @@ export default class PathGroup extends Component {
             radius,
             outer,
             arc: thisArc,
-            key: i,
             data: d,
+            startPathCoordinates: thisArc().split('A')[0].split('M')[1],
           });
 
           // Clone the children and pass in the props and state
           const cloneChildrenWithProps = cloneComponents(this.props.children, props);
 
           return (
-            <g transform={`translate(0,${i * marginAndWidth})`}>
-              <g transform={`translate(${cX},0)`}>
+            <g
+              key={i}
+              transform={`translate(0,${i * marginAndWidth})`}
+            >
+              <g transform={`translate(${cX},${cY})`}>
                 {cloneChildrenWithProps}
               </g>
             </g>

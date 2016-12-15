@@ -1,10 +1,6 @@
-import React, {
-  Component,
-  PropTypes } from 'react';
-
+import React, { Component, PropTypes } from 'react';
 import throttle from 'lodash.throttle';
 import ReactIf from './ReactIf';
-import SolidGauge from './SolidGauge';
 import cloneComponents from './cloneChildren';
 
 export default class Chart extends Component {
@@ -12,11 +8,15 @@ export default class Chart extends Component {
     // enables listen to window width change and rerenders the chart
     // on resize
     responsive: PropTypes.bool,
+    // if not responsive then user can set width and height
+    width: PropTypes.number,
+    height: PropTypes.number,
     // the chart components
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    childRules: PropTypes.bool,
   }
 
   constructor(props) {
@@ -35,7 +35,6 @@ export default class Chart extends Component {
   }
   /*
     register the throttled resize function if responsive is set to true
-
    */
   componentDidMount() {
     if (this.props.responsive === true) {
@@ -53,36 +52,62 @@ export default class Chart extends Component {
   }
 
   onResize() {
-    const dimension = this.chart.getBoundingClientRect();
-    console.log(dimension);
-    this.setState({
-      width: dimension.width,
-      height: dimension.height,
-    });
+    if (this.props.responsive) {
+      const dimension = this.chart.getBoundingClientRect();
+      this.setState({
+        width: dimension.width,
+        height: dimension.height,
+      });
+    } else {
+      this.setState({
+        width: this.props.width,
+        height: this.props.height,
+      });
+    }
   }
   render() {
+    let fill;
+
+    React.Children.forEach(this.props.children, ({ props }) => {
+      if (props.liquid && props.liquid.fill) {
+        fill = props.liquid.fill;
+      }
+    });
+
     const { children, ...noChildren } = this.props;
+
     // Copy the props and the state to pass it down to the children
     const props = Object.assign({}, noChildren, {
       width: this.state.width,
       height: this.state.height,
+      fill,
     });
 
     // clone the children and pass in the props and state
-    const cloneChildrenWithProps = cloneComponents(this.props.children, props);
+    const cloneChildrenWithProps = cloneComponents(
+                                    this.props.children,
+                                    props,
+                                    this.props.childRules);
 
     // make the chart take up the whole width and height of the parent
     const style = {
       width: '100%',
       height: '100%',
     };
+    console.log(this.state.height);
 
     return (
       <div
         style={style}
         ref={(c) => { this.chart = c; }}
       >
-        <ReactIf condition={this.state.height !== null && this.state.height !== 0}>
+        <ReactIf
+          condition={
+            this.state.height !== undefined &&
+            this.state.height !== null &&
+            this.state.height !== 0
+          }
+        >
           <svg width="100%" height="100%">
             {cloneChildrenWithProps}
           </svg>

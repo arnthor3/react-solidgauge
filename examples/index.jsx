@@ -1,9 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Chart, Path, PathGroup, BackgroundPath, StartCircle, EndCircle } from '../src/';
+import SolidGauge, { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label } from '../src/';
+
+console.log(Chart, Path, PathGroup, BackgroundPath, EndCircle, Label);
 
 const values = [
-  { label: 'Email Campaign', value: 89, fill: '#881' },
+  { label: 'Email Campaign', value: 189, fill: '#881' },
   { label: 'Google AdWords', value: 65, fill: '#188' },
   { label: 'Youtube Campaign', value: 49, fill: '#818' },
   { label: 'Facebook Campaign', value: 29, fill: '#bb4' },
@@ -19,11 +21,11 @@ const chart = (
   >
     <Chart
       responsive
-      pathWidth={5}
-      pathMargin={35}
+      margin={0.05}
+      pathWidth={2}
+      pathMargin={45}
       circle
-      fontSize={'20px'}
-      ease="linear"
+      ease="bounce"
       background={{
         fill: '#ccc',
         stroke: '#999',
@@ -33,47 +35,46 @@ const chart = (
     >
       <PathGroup>
         <BackgroundPath />
+        <Label
+          fontSize="18"
+        />
         <Path>
-          <StartCircle r={5} />
           <EndCircle
-            r={10}
-            fill={'rgba(90,90,150,1)'}
+            stroke="rgb(120,120,120)"
+            r={12}
           />
         </Path>
-    </PathGroup>
+      </PathGroup>
     </Chart>
-
   </div>
 );
 
-/*
-
-  <Chart
-    values={values}
-    responsive
-    endAngle={0}
-    ease="bounce"
+const chart2 = (
+  <div
+    style={{
+      marginTop: '50px',
+      width: '100%',
+      height: '500px',
+    }}
   >
-    <PathGroup>
-      <Text
-        fontSize="23"
-        stroke={}
-        width={}
-      />
-      <BackgroundPath
-        fill={}
-        stroke={}
-      />
-      <Path>
-        <StartCircle
-        />
-        <EndCircle
-        />
-      </Path>
-    </PathGroup>
+    <SolidGauge
+      responsive
+      margin={0.05}
+      pathWidth={25}
+      pathMargin={5}
+      circle
+      ease="bounce"
+      background={{
+        fill: '#ccc',
+        stroke: '#999',
+      }}
+      animate
+      animateTime={100}
+      endAngle={Math.PI * 1.5}
+      values={values}
+    />
+  </div>
+);
 
-  </Chart>
-
-*/
 
 render(chart, document.getElementById('app'));
