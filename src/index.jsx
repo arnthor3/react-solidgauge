@@ -7,6 +7,7 @@ import Label from './Chart/Label';
 import Shadow from './Chart/Shadow';
 import SolidGauge from './Chart/SolidGauge';
 import Glow from './Chart/Glow';
+import ToolTip from './Chart/ToolTip';
 
-export { Chart, PathGroup, BackgroundPath, Path, EndCircle, Label, Shadow, Glow };
+export { Chart, PathGroup, BackgroundPath, Path, EndCircle, Label, Shadow, Glow, ToolTip };
 export default SolidGauge;

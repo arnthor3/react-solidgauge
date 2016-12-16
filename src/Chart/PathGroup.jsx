@@ -43,21 +43,25 @@ export default class PathGroup extends Component {
 
   render() {
     const height = this.props.height - 40;
+    const fullRadius = Math.min((this.props.height / 2) - 20, this.props.width / 2);
+    const width = this.props.pathWidth * fullRadius;
+    const margin = this.props.pathMargin * fullRadius;
+
     return (
       <g
         transform="translate(0,20)"
         ref={(c) => { this.container = c; }}
       >
         {this.props.values.map((d, i) => {
-          const marginAndWidth = this.props.pathWidth + this.props.pathMargin;
+          const marginAndWidth = width + margin;
+
           const cX = (this.props.width / 2);
           const cY = (height / 2) - (i * marginAndWidth);
           const radius = Math.min(cX, cY);
           const outer = radius;
-
           const thisArc = arc()
                             .outerRadius(outer)
-                            .innerRadius(outer - (this.props.pathWidth))
+                            .innerRadius(outer - width)
                             .startAngle(0)
                             .endAngle(this.props.endAngle);
 
@@ -73,10 +77,11 @@ export default class PathGroup extends Component {
             arc: thisArc,
             data: d,
             startPathCoordinates: thisArc().split('A')[0].split('M')[1],
+
           });
 
           // Clone the children and pass in the props and state
-          const cloneChildrenWithProps = cloneComponents(this.props.children, props);
+          const cloneChildrenWithProps = cloneComponents(this.props.children, props, true);
 
           return (
             <g
