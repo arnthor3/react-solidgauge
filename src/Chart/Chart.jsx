@@ -94,7 +94,6 @@ export default class Chart extends Component {
       width: '100%',
       height: '100%',
     };
-    console.log(this.state.height);
 
     return (
       <div

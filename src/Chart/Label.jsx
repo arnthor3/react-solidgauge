@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const Label = ({ data, fontSize, startPathCoordinates }) => (
+const Label = ({ data, fontSize, startPathCoordinates, pathWidth }) => (
   <g
     transform={`translate(${startPathCoordinates})`}
   >
@@ -13,7 +13,7 @@ const Label = ({ data, fontSize, startPathCoordinates }) => (
       stroke={data.stroke}
       textAnchor="end"
       dx={-15}
-      dy={4.5}
+      dy={(fontSize / 2) + (pathWidth / 4)}
     >{data.label}</text>
   </g>
 );
@@ -27,6 +27,7 @@ Label.propTypes = {
   }),
   fontSize: PropTypes.string,
   startPathCoordinates: PropTypes.string,
+  pathWidth: PropTypes.number,
 };
 
 Label.defaultProps = {

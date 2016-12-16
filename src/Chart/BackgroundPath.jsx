@@ -3,12 +3,13 @@ import React, { PropTypes } from 'react';
 /*
   A very simple component
  */
-const BackgroundPath = ({ arc, fill, stroke, cY }) => (
+const BackgroundPath = ({ arc, fill, stroke, cY, filter }) => (
   <g>
     <path
       d={arc()}
       fill={fill}
       stroke={stroke}
+      filter={filter}
     />
   </g>
 );
@@ -18,6 +19,7 @@ BackgroundPath.propTypes = {
   fill: PropTypes.string,
   stroke: PropTypes.string,
   cY: PropTypes.number,
+  filter: PropTypes.string,
 };
 
 BackgroundPath.defaultProps = {

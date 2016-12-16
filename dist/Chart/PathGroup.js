@@ -14,7 +14,13 @@ var _d3Shape = require('d3-shape');
 
 var _d3Selection = require('d3-selection');
 
+var _cloneChildren = require('./cloneChildren');
+
+var _cloneChildren2 = _interopRequireDefault(_cloneChildren);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22,9 +28,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-/*
-  PropType for fill and stroke..
- */
 var fillStroke = _react.PropTypes.shape({
   fill: _react.PropTypes.string,
   stroke: _react.PropTypes.string
@@ -40,69 +43,62 @@ var PathGroup = function (_Component) {
   }
 
   _createClass(PathGroup, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var el = (0, _d3Selection.select)(this.container).select('path.val');
-      el.datum([this.props.data.value]);
-      el.node().arc = this.localArc;
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      var el = (0, _d3Selection.select)(this.container).select('path.val');
-      el.datum([this.props.data.value]);
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var marginAndWidth = this.props.pathWidth + this.props.pathMargin;
-      var cX = this.props.width / 2;
-      var cY = this.props.height / 2 - this.props.iter * marginAndWidth;
-      var radius = Math.min(cX, cY);
-      var outer = 0.99 * radius;
-      this.localArc = (0, _d3Shape.arc)().outerRadius(outer).innerRadius(outer - this.props.pathWidth).startAngle(this.props.startAngle).endAngle(this.props.endAngle);
+      var height = this.props.height - 40;
       return _react2.default.createElement(
         'g',
-        { transform: 'translate(' + 0 + ',' + this.props.iter * marginAndWidth + ')' },
-        _react2.default.createElement(
-          'g',
-          { transform: 'translate(' + cX + ',' + 0 + ')' },
-          _react2.default.createElement(
-            'text',
+        {
+          transform: 'translate(0,20)',
+          ref: function ref(c) {
+            _this2.container = c;
+          }
+        },
+        this.props.values.map(function (d, i) {
+          var marginAndWidth = _this2.props.pathWidth + _this2.props.pathMargin;
+          var cX = _this2.props.width / 2;
+          var cY = height / 2 - i * marginAndWidth;
+          var radius = Math.min(cX, cY);
+          var outer = radius;
+
+          var thisArc = (0, _d3Shape.arc)().outerRadius(outer).innerRadius(outer - _this2.props.pathWidth).startAngle(0).endAngle(_this2.props.endAngle);
+
+          var _props = _this2.props,
+              children = _props.children,
+              noChildren = _objectWithoutProperties(_props, ['children']);
+
+          // Copy the props and the state to pass it down to the children
+
+
+          var props = Object.assign({}, noChildren, {
+            marginAndWidth: marginAndWidth,
+            cX: cX,
+            cY: cY,
+            radius: radius,
+            outer: outer,
+            arc: thisArc,
+            data: d,
+            startPathCoordinates: thisArc().split('A')[0].split('M')[1]
+          });
+
+          // Clone the children and pass in the props and state
+          var cloneChildrenWithProps = (0, _cloneChildren2.default)(_this2.props.children, props);
+
+          return _react2.default.createElement(
+            'g',
             {
-              textAnchor: 'end',
-              fontSize: this.props.fontSize,
-              fill: this.props.data.fill,
-              dy: marginAndWidth / 2,
-              dx: '-10px',
-              style: {
-                pointerEvents: 'none'
-              }
+              key: i,
+              transform: 'translate(0,' + i * marginAndWidth + ')'
             },
-            this.props.data.label
-          )
-        ),
-        _react2.default.createElement(
-          'g',
-          {
-            ref: function ref(c) {
-              _this2.container = c;
-            },
-            transform: 'translate(' + cX + ',' + cY + ')'
-          },
-          _react2.default.createElement('path', {
-            d: this.localArc(),
-            fill: this.props.background.fill,
-            stroke: this.props.background.stroke
-          }),
-          _react2.default.createElement('path', {
-            fill: this.props.data.fill,
-            stroke: this.props.data.stroke,
-            className: 'val'
-          })
-        )
+            _react2.default.createElement(
+              'g',
+              { transform: 'translate(' + cX + ',' + cY + ')' },
+              cloneChildrenWithProps
+            )
+          );
+        })
       );
     }
   }]);
@@ -111,28 +107,26 @@ var PathGroup = function (_Component) {
 }(_react.Component);
 
 PathGroup.propTypes = {
-  pathWidth: _react.PropTypes.number,
-  pathMargin: _react.PropTypes.number,
   width: _react.PropTypes.number,
   height: _react.PropTypes.number,
+  values: _react.PropTypes.arrayOf(_react.PropTypes.shape({})),
+  ease: _react.PropTypes.string,
+  pathWidth: _react.PropTypes.number,
+  pathMargin: _react.PropTypes.number,
   iter: _react.PropTypes.number,
-  startAngle: _react.PropTypes.number,
   endAngle: _react.PropTypes.number,
   background: fillStroke,
   fontSize: _react.PropTypes.string,
+  margin: _react.PropTypes.number,
   data: _react.PropTypes.shape({
     value: _react.PropTypes.number,
     label: _react.PropTypes.string,
     fill: _react.PropTypes.string,
     stroke: _react.PropTypes.string
-  })
+  }),
+  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node])
 };
 PathGroup.defaultProps = {
-  startAngle: 0,
-  endAngle: Math.PI * 1.5,
-  background: {
-    fill: '#ccc',
-    stroke: '#999'
-  }
+  ease: 'easeBounce'
 };
 exports.default = PathGroup;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import SolidGauge, { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label } from '../src/';
+import SolidGauge, { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label, Shadow } from '../src/';
 
-console.log(Chart, Path, PathGroup, BackgroundPath, EndCircle, Label);
 
 const values = [
   { label: 'Email Campaign', value: 189, fill: '#881' },
@@ -22,8 +21,8 @@ const chart = (
     <Chart
       responsive
       margin={0.05}
-      pathWidth={2}
-      pathMargin={45}
+      pathWidth={25}
+      pathMargin={25}
       circle
       ease="bounce"
       background={{
@@ -36,13 +35,10 @@ const chart = (
       <PathGroup>
         <BackgroundPath />
         <Label
-          fontSize="18"
+          fontSize="20"
         />
         <Path>
-          <EndCircle
-            stroke="rgb(120,120,120)"
-            r={12}
-          />
+
         </Path>
       </PathGroup>
     </Chart>
