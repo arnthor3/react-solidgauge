@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
 import SolidGauge, { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label, Shadow } from '../src/';
 
@@ -10,40 +10,56 @@ const values = [
   { label: 'Facebook Campaign', value: 29, fill: '#bb4' },
 ];
 
-const chart = (
-  <div
-    style={{
-      marginTop: '50px',
-      width: '100%',
-      height: '500px',
-    }}
-  >
-    <Chart
-      responsive
-      margin={0.05}
-      pathWidth={25}
-      pathMargin={25}
-      circle
-      ease="bounce"
-      background={{
-        fill: '#ccc',
-        stroke: '#999',
-      }}
-      endAngle={Math.PI * 1.5}
-      values={values}
-    >
-      <PathGroup>
-        <BackgroundPath />
-        <Label
-          fontSize="20"
-        />
-        <Path>
-
-        </Path>
-      </PathGroup>
-    </Chart>
-  </div>
-);
+class ChartSG extends Component {
+  constructor() {
+    super();
+    this.onClick = this.onClick.bind(this);
+    this.state = { values };
+  }
+  onClick() {
+    const vals = this.state.values;
+    this.setState({ values: this.state.values.map(d => {
+      d.value = Math.random() * 100;
+      return d;
+    })});
+  }
+  render() {
+    return (
+      <div
+        style={{
+          marginTop: '50px',
+          width: '100%',
+          height: '500px',
+        }}
+        onClick={this.onClick}
+      >
+        <Chart
+          responsive
+          margin={0.05}
+          pathWidth={25}
+          pathMargin={25}
+          background={{
+            fill: '#ccc',
+            stroke: '#999',
+          }}
+          endAngle={Math.PI * 1.5}
+          values={values}
+        >
+          <PathGroup>
+            <BackgroundPath />
+            <Label
+              fontSize={20}
+            />
+            <Path
+              ease="easeBounce"
+            >
+            </Path>
+          </PathGroup>
+        </Chart>
+      </div>
+    );
+  }
+}
 
 const chart2 = (
   <div
@@ -59,7 +75,7 @@ const chart2 = (
       pathWidth={25}
       pathMargin={5}
       circle
-      ease="bounce"
+      ease="easeBounce"
       background={{
         fill: '#ccc',
         stroke: '#999',
@@ -73,4 +89,4 @@ const chart2 = (
 );
 
 
-render(chart, document.getElementById('app'));
+render(<ChartSG />, document.getElementById('app'));

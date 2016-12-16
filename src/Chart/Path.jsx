@@ -77,7 +77,7 @@ export default class Path extends Component {
         const scale = scaleLinear()
                         .domain([0, 100])
                         .range([0, this.props.endAngle]);
-        const interpolatePath = interpolate(path.node().old || 0, scale(value));
+        const interpolatePath = interpolate(scale(path.node().old || 0), scale(value));
 
         if (endCircle.empty()) {
           return t => thisArc.endAngle(interpolatePath(t))();

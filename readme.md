@@ -15,8 +15,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label } from '../src/';
 
-console.log(Chart, Path, PathGroup, BackgroundPath, EndCircle, Label);
-
 const values = [
   { label: 'Email Campaign', value: 89, fill: '#881' },
   { label: 'Google AdWords', value: 65, fill: '#188' },
@@ -38,7 +36,7 @@ const chart = (
       pathWidth={2}
       pathMargin={40}
       circle
-      ease="bounce"
+      ease="easeBounce"
       background={{
         fill: '#ccc',
         stroke: '#999',
