@@ -34,13 +34,8 @@ class ChartSG extends Component {
       >
         <Chart
           responsive
-          margin={0.05}
-          pathWidth={0.1}
+          pathWidth={0.01}
           pathMargin={0.1}
-          background={{
-            fill: '#ccc',
-            stroke: '#999',
-          }}
           endAngle={Math.PI * 1.5}
           values={values}
         >
@@ -52,6 +47,7 @@ class ChartSG extends Component {
             <Path
               ease="easeBounce"
             >
+              <EndCircle r={10} />
             </Path>
           </PathGroup>
         </Chart>

@@ -47,7 +47,7 @@ export default class Chart extends Component {
    */
   componentWillUnmount() {
     if (this.props.responsive === true) {
-      window.removeEventlistener('resize', this.resize);
+      window.removeEventListener('resize', this.resize);
     }
   }
 
@@ -66,21 +66,11 @@ export default class Chart extends Component {
     }
   }
   render() {
-    let fill;
-
-    React.Children.forEach(this.props.children, ({ props }) => {
-      if (props.liquid && props.liquid.fill) {
-        fill = props.liquid.fill;
-      }
-    });
-
     const { children, ...noChildren } = this.props;
-
     // Copy the props and the state to pass it down to the children
     const props = Object.assign({}, noChildren, {
       width: this.state.width,
       height: this.state.height,
-      fill,
     });
 
     // clone the children and pass in the props and state

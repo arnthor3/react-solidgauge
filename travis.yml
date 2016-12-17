@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "6"
+env:
+  - REACT=0.13
+  - REACT=0.14
+  - REACT=15
