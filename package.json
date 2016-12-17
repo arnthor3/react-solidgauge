@@ -7,6 +7,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "start": "webpack-dev-server --inline --hot",
+    "coveralls": "jet --coverage | coveralls",
     "build": "babel src -d dist"
   },
   "repository": {
