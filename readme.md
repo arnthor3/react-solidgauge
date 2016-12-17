@@ -1,5 +1,6 @@
 
 ## React-solidgauge
+[![Build Status](https://travis-ci.org/arnthor3/react-solidgauge.svg?branch=master)](https://travis-ci.org/arnthor3/react-solidgauge)
 [![Coverage Status](https://coveralls.io/repos/github/arnthor3/react-solidgauge/badge.svg?branch=master)](https://coveralls.io/github/arnthor3/react-solidgauge?branch=master)
 
 This is a really nice looking react d3 graph that is sort of inspired by amcharts solid-gauge.
