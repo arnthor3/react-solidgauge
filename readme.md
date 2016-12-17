@@ -1,4 +1,7 @@
+
 ## React-solidgauge
+[![Coverage Status](https://coveralls.io/repos/github/arnthor3/react-solidgauge/badge.svg?branch=master)](https://coveralls.io/github/arnthor3/react-solidgauge?branch=master)
+
 This is a really nice looking react d3 graph that is sort of inspired by amcharts solid-gauge.
 This chart is supposed to handle situations where you need to compare level of completions or performance between similar entities.
 
