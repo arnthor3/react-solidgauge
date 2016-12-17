@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watch",
     "coverage": "jest --coverage",
     "start": "webpack-dev-server --inline --hot",
     "coveralls": "jet --coverage | coveralls",

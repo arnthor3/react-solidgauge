@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { arc } from 'd3-shape';
 import { select, selectAll, mouse } from 'd3-selection';
-import 'd3-transition';
 import cloneComponents from './cloneChildren';
-
+import ToolTip from './ToolTip';
 
 const fillStroke = PropTypes.shape({
   fill: PropTypes.string,
@@ -46,6 +45,28 @@ export default class PathGroup extends Component {
     chartMargin: 20,
   };
 
+  componentDidMount() {
+    this.appendHover();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.appendHover();
+  }
+
+  appendHover() {
+    const el = select(this.container);
+    const tool = select(el.node().querySelector('.toolTip'));
+    el.on('mousemove', () => {
+      const pos = mouse(el.node());
+      tool.attr('transform', `translate(${pos[0]},${pos[1]})`);
+    });
+
+    el.on('mouseleave', () => {
+      tool.transition().duartion(1000).delay(1000).style('opacity', 0);
+    });
+  }
+
+
   render() {
     const chartMargin = this.props.chartMargin;
     const height = this.props.height - chartMargin;
@@ -58,6 +79,7 @@ export default class PathGroup extends Component {
         transform="translate(0,20)"
         ref={(c) => { this.container = c; }}
       >
+      <ToolTip />
         {this.props.values.map((d, i) => {
           const marginAndWidth = width + margin;
 
@@ -67,27 +89,9 @@ export default class PathGroup extends Component {
           const outer = radius;
           const thisArc = arc()
                             .outerRadius(outer)
-                            .innerRadius(outer - width)
+                            .innerRadius(outer - marginAndWidth)
                             .startAngle(0)
                             .endAngle(this.props.endAngle);
-
-          const { children, ...noChildren } = this.props;
-
-          // Copy the props and the state to pass it down to the children
-          const props = Object.assign({}, noChildren, {
-            marginAndWidth,
-            cX,
-            cY,
-            radius,
-            outer,
-            arc: thisArc,
-            data: d,
-            startPathCoordinates: thisArc().split('A')[0].split('M')[1],
-            pathWidth: width,
-          });
-
-          // Clone the children and pass in the props and state
-          const cloneChildrenWithProps = cloneComponents(this.props.children, props);
 
           return (
             <g
@@ -95,11 +99,16 @@ export default class PathGroup extends Component {
               transform={`translate(0,${i * marginAndWidth})`}
             >
               <g transform={`translate(${cX},${cY})`}>
-                {cloneChildrenWithProps}
+                <path
+                  d={thisArc()}
+                  fill="rgba(0,0,0,0)"
+                  stroke="rgba(0,0,0,0)"
+                />
               </g>
             </g>
           );
         })}
+
       </g>
     );
   }

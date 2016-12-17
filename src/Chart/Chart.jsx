@@ -66,7 +66,9 @@ export default class Chart extends Component {
     }
   }
   render() {
+    // copy all the props excepct the children
     const { children, ...noChildren } = this.props;
+
     // Copy the props and the state to pass it down to the children
     const props = Object.assign({}, noChildren, {
       width: this.state.width,
@@ -78,12 +80,19 @@ export default class Chart extends Component {
                                     this.props.children,
                                     props,
                                     this.props.childRules);
-
-    // make the chart take up the whole width and height of the parent
-    const style = {
-      width: '100%',
-      height: '100%',
-    };
+    let style;
+    // make the chart take up the whole width and height of the parent if its responsive
+    if (this.props.responsive) {
+      style = {
+        width: '100%',
+        height: '100%',
+      };
+    } else {
+      style = {
+        width: this.props.width,
+        height: this.props.height,
+      };
+    }
 
     return (
       <div

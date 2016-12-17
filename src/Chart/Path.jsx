@@ -140,6 +140,7 @@ export default class Path extends Component {
           ref={(c) => { this.path = c; }}
           fill={this.props.data.fill}
           stroke={this.props.data.stroke}
+          filter={this.props.filter}
         />
         {cloneChildrenWithProps}
       </g>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Chart from './Chart';
 import PathGroup from './PathGroup';
 import BackgroundPath from './BackgroundPath';
@@ -12,11 +12,21 @@ const SolidGauge = props => (
     {...props}
   >
     <PathGroup>
-      <BackgroundPath />
+      <BackgroundPath
+        fill={props.background.fill}
+        stroke={props.background.stroke}
+      />
       <Label />
       <Path />
     </PathGroup>
   </Chart>
 );
+
+SolidGauge.propTypes = {
+  background: PropTypes.shape({
+    fill: PropTypes.string,
+    stroke: PropTypes.string,
+  }),
+};
 
 export default SolidGauge;
