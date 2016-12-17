@@ -1,7 +1,6 @@
 ## React-solidgauge
-This is a really nice looking react d3 graph that is sort of inspired by amcharts.
-
-The chart is supposed to compare a couple of percentage values, so if you pass into the value
+This is a really nice looking react d3 graph that is sort of inspired by amcharts solid-gauge.
+This chart is supposed to handle situations where you need to compare level of completions or performance between similar entities.
 
 ### Install from NPM
 ```sh
@@ -11,141 +10,31 @@ npm install react-solidgauge
 ### Usage
 
 ```js
-import React from 'react';
-import { render } from 'react-dom';
-import { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label } from '../src/';
 
-const values = [
-  { label: 'Email Campaign', value: 89, fill: '#881' },
-  { label: 'Google AdWords', value: 65, fill: '#188' },
-  { label: 'Youtube Campaign', value: 49, fill: '#818' },
-  { label: 'Facebook Campaign', value: 29, fill: '#bb4' },
-];
-
-const chart = (
-  <div
-    style={{
-      marginTop: '50px',
-      width: '100%',
-      height: '500px',
-    }}
-  >
-    <Chart
-      responsive
-      margin={0.05}
-      pathWidth={2}
-      pathMargin={40}
-      circle
-      ease="easeBounce"
-      background={{
-        fill: '#ccc',
-        stroke: '#999',
-      }}
-      endAngle={Math.PI * 1.5}
-      values={values}
-    >
-      <PathGroup>
-        <BackgroundPath
-          fill={someFill}
-          stroke={someStroke}
-        />
-        <Label
-          fontSize="18"
-          dx="-15"
-          dy="-4.5"
-        />
-        <Path>
-          <EndCircle
-            stroke="rgb(100,100,100)"
-            r={12}
-          />
-        </Path>
-      </PathGroup>
-    </Chart>
-  </div>
-);
-
-
-render(chart, document.getElementById('app'));
 ```
 
 
 ## Components
-The chart is broken down into a couple of components plus a simple chart component.
-All the children pass down the props from parent that means that you can plug in any react component anywhere in the chart and it will get all the props passed down
-### Example of customizing
-```js
-
-const MyLabel = ({ cY, value, label, fill, stroke, startPathCoordinates }) => (
-  <g transform={`translate(0, ${cY})`}>
-    <text
-      transform={`translate(${startPathCoordinates})`}
-      fontSize="16px"
-      fill={d3.color(fill).darker(0.5)}
-    >
-    {`${label} ${value}%`}
-    </text>
-  </g>
-)
-
-const chart = (
-  <div
-    style={{
-      marginTop: '50px',
-      width: '100%',
-      height: '500px',
-    }}
-  >
-    <Chart
-      responsive
-      margin={0.05}
-      pathWidth={2}
-      pathMargin={40}
-      circle
-      ease="bounce"
-      background={{
-        fill: '#ccc',
-        stroke: '#999',
-      }}
-      endAngle={Math.PI * 1.5}
-      values={values}
-    >
-      <PathGroup>
-        <BackgroundPath
-          fill={someFill}
-          stroke={someStroke}
-        />
-        <MyLabel />
-        <Path>
-          <EndCircle
-            stroke="rgb(100,100,100)"
-            r={12}
-          />
-        </Path>
-      </PathGroup>
-    </Chart>
-  </div>
-);
-
-render(chart, document.getElementById('app'));
-```
+You can use the chart a couple of different ways, you can use the components if you need to do alot of customizing or you can just use the simple component.
 
 ### Chart
 This component renders the svg and the parent div into the dom.
 If the Chart is set to responsive then they will fill out into the parent div of the Chart component.
 The Chart also accepts width and height.
 
+The Chart also passes down the width and heigth to the props.children.
+
 #### Chart Props
 
 |Name|Type|Default|Description|
 ---|---|---|---
 responsive|boolean|*true*| Rerenders the chart on screen resize
-width|boolean|*true*| sets the width of the component, if responsive is true then it will fill out into the parent container
-height|boolean|*true*| sets the height of the component, the same applies here to the responsive prop.
+width|number|| sets the width of the component, if responsive is true then it will fill out into the parent container
+height|number|| sets the height of the component, the same applies here to the responsive prop.
 endAngle|number|Math.PI*1.5|EndAngle value
 values|Array of shape|*null*|This is the array that holds all the info, each shape has value, label, fill and stroke, that are applied to the legend and the path
-pathWidth|number|*null*|The width of the paths in the chart, user has to make sure they do not overlap
-pathMargin|number|*null*|The margin between the paths in the chart, user has to make sure they do not overlap
+pathWidth|number|*0.1*|The path width, 0.1 by default means 10% of the chart radius
+pathMargin|number|*0.1*|The margin between the paths, 0.1 by default means 10% of the chart radius
 background|shape|*{ fill: '#ccc', stroke: '#999'}*|The fill and stroke of the background arc
 fontSize|string|*null*|Sets the fontsize for lables
 animates|bool|*true*|if true then animates
