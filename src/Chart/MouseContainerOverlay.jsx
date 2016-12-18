@@ -58,11 +58,15 @@ export default class PathGroup extends Component {
     const tool = select(el.node().querySelector('.toolTip'));
     el.on('mousemove', () => {
       const pos = mouse(el.node());
-      tool.attr('transform', `translate(${pos[0]},${pos[1]})`);
+      tool.attr('transform', `translate(${pos[0] - 20},${pos[1] - 50})`);
     });
 
     el.on('mouseleave', () => {
-      tool.transition().duartion(1000).delay(1000).style('opacity', 0);
+      tool.select('rect')
+        .transition()
+        .duartion(1000)
+        .delay(1000)
+        .style('opacity', 0);
     });
   }
 
