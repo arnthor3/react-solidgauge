@@ -15,17 +15,15 @@ export default class PathGroup extends Component {
     height: PropTypes.number,
     values: PropTypes.arrayOf(
       PropTypes.shape({
-
+        value: PropTypes.number,
+        label: PropTypes.string,
+        fill: PropTypes.string,
+        stroke: PropTypes.string,
       }),
     ),
-    ease: PropTypes.string,
     pathWidth: PropTypes.number,
     pathMargin: PropTypes.number,
-    iter: PropTypes.number,
     endAngle: PropTypes.number,
-    cornerRadius: PropTypes.number,
-    background: fillStroke,
-    fontSize: PropTypes.string,
     margin: PropTypes.number,
     chartMargin: PropTypes.number,
     data: PropTypes.shape({
@@ -34,10 +32,6 @@ export default class PathGroup extends Component {
       fill: PropTypes.string,
       stroke: PropTypes.string,
     }),
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
   }
 
   static defaultProps = {
@@ -56,15 +50,21 @@ export default class PathGroup extends Component {
   appendHover() {
     const el = select(this.container);
     const tool = select(el.node().querySelector('.toolTip'));
-    el.on('mousemove', () => {
+    el.selectAll('path').on('mousemove', (d, i, p) => {
+      // fix this mess
+      const iter = i === 0 ? 1 : i;
+      const { fill, value } = this.props.values[iter - 1];
       const pos = mouse(el.node());
-      tool.attr('transform', `translate(${pos[0] - 20},${pos[1] - 50})`);
+
+      tool.style('opacity', 1);
+      tool.select('path').attr('stroke', fill);
+      tool.select('text').text(`${Math.floor(value)}%`);
+      tool.attr('transform', `translate(${pos[0] - 26},${pos[1] - 64})`);
     });
 
     el.on('mouseleave', () => {
-      tool.select('rect')
+      tool
         .transition()
-        .duartion(1000)
         .delay(1000)
         .style('opacity', 0);
     });
@@ -84,6 +84,9 @@ export default class PathGroup extends Component {
         ref={(c) => { this.container = c; }}
       >
       <ToolTip />
+      <g
+        ref={(c) => { this.mouseoverlay = c; }}
+      />
         {this.props.values.map((d, i) => {
           const marginAndWidth = width + margin;
 
@@ -105,8 +108,9 @@ export default class PathGroup extends Component {
               <g transform={`translate(${cX},${cY})`}>
                 <path
                   d={thisArc()}
-                  fill="rgba(0,0,0,0)"
-                  stroke="rgba(0,0,0,0)"
+                  opacity="0"
+                  fill={d.fill}
+                  stroke={d.stroke}
                 />
               </g>
             </g>
