@@ -14,15 +14,15 @@ var _d3Shape = require('d3-shape');
 
 var _d3Selection = require('d3-selection');
 
-require('d3-transition');
-
 var _cloneChildren = require('./cloneChildren');
 
 var _cloneChildren2 = _interopRequireDefault(_cloneChildren);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ToolTip = require('./ToolTip');
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+var _ToolTip2 = _interopRequireDefault(_ToolTip);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -45,55 +45,73 @@ var PathGroup = function (_Component) {
   }
 
   _createClass(PathGroup, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.appendHover();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      this.appendHover();
+    }
+  }, {
+    key: 'appendHover',
+    value: function appendHover() {
+      var _this2 = this;
+
+      var el = (0, _d3Selection.select)(this.container);
+      var tool = (0, _d3Selection.select)(el.node().querySelector('.toolTip'));
+      el.selectAll('path').on('mousemove', function (d, i, p) {
+        // fix this mess
+        var iter = i === 0 ? 1 : i;
+        var _props$values = _this2.props.values[iter - 1],
+            fill = _props$values.fill,
+            value = _props$values.value;
+
+        var pos = (0, _d3Selection.mouse)(el.node());
+
+        tool.style('opacity', 1);
+        tool.select('path').attr('stroke', fill);
+        tool.select('text').text(Math.floor(value) + '%');
+        tool.attr('transform', 'translate(' + (pos[0] - 26) + ',' + (pos[1] - 64) + ')');
+      });
+
+      el.on('mouseleave', function () {
+        tool.transition().duration(500).delay(500).style('opacity', 0);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var chartMargin = this.props.chartMargin;
       var height = this.props.height - chartMargin;
       var fullRadius = Math.min(this.props.height / 2 - chartMargin / 2, this.props.width / 2);
       var width = this.props.pathWidth * fullRadius;
       var margin = this.props.pathMargin * fullRadius;
-      console.log(this.props);
       return _react2.default.createElement(
         'g',
         {
-          transform: 'translate(0,' + chartMargin / 2 + ')',
+          transform: 'translate(0,20)',
           ref: function ref(c) {
-            _this2.container = c;
+            _this3.container = c;
           }
         },
+        _react2.default.createElement(_ToolTip2.default, null),
+        _react2.default.createElement('g', {
+          ref: function ref(c) {
+            _this3.mouseoverlay = c;
+          }
+        }),
         this.props.values.map(function (d, i) {
           var marginAndWidth = width + margin;
 
-          var cX = _this2.props.width / 2;
+          var cX = _this3.props.width / 2;
           var cY = height / 2 - i * marginAndWidth;
           var radius = Math.min(cX, cY);
           var outer = radius;
-          var thisArc = (0, _d3Shape.arc)().outerRadius(outer).innerRadius(outer - width).startAngle(0).endAngle(_this2.props.endAngle);
-
-          var _props = _this2.props,
-              children = _props.children,
-              noChildren = _objectWithoutProperties(_props, ['children']);
-
-          // Copy the props and the state to pass it down to the children
-
-
-          var props = Object.assign({}, noChildren, {
-            marginAndWidth: marginAndWidth,
-            cX: cX,
-            cY: cY,
-            radius: radius,
-            outer: outer,
-            arc: thisArc,
-            data: d,
-            startPathCoordinates: thisArc().split('A')[0].split('M')[1],
-            pathWidth: width,
-            ease: _this2.props.ease
-          });
-
-          // Clone the children and pass in the props and state
-          var cloneChildrenWithProps = (0, _cloneChildren2.default)(_this2.props.children, props, _this2.childRules);
+          var thisArc = (0, _d3Shape.arc)().outerRadius(outer).innerRadius(outer - marginAndWidth).startAngle(0).endAngle(_this3.props.endAngle);
 
           return _react2.default.createElement(
             'g',
@@ -104,7 +122,12 @@ var PathGroup = function (_Component) {
             _react2.default.createElement(
               'g',
               { transform: 'translate(' + cX + ',' + cY + ')' },
-              cloneChildrenWithProps
+              _react2.default.createElement('path', {
+                d: thisArc(),
+                opacity: '0',
+                fill: d.fill,
+                stroke: d.stroke
+              })
             )
           );
         })
@@ -118,29 +141,19 @@ var PathGroup = function (_Component) {
 PathGroup.propTypes = {
   width: _react.PropTypes.number,
   height: _react.PropTypes.number,
-  values: _react.PropTypes.arrayOf(_react.PropTypes.shape({})),
-  ease: _react.PropTypes.string,
-  pathWidth: _react.PropTypes.number,
-  pathMargin: _react.PropTypes.number,
-  iter: _react.PropTypes.number,
-  endAngle: _react.PropTypes.number,
-  cornerRadius: _react.PropTypes.number,
-  background: fillStroke,
-  fontSize: _react.PropTypes.string,
-  margin: _react.PropTypes.number,
-  chartMargin: _react.PropTypes.number,
-  data: _react.PropTypes.shape({
+  values: _react.PropTypes.arrayOf(_react.PropTypes.shape({
     value: _react.PropTypes.number,
     label: _react.PropTypes.string,
     fill: _react.PropTypes.string,
     stroke: _react.PropTypes.string
-  }),
-  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
-  childRules: _react.PropTypes.bool
+  })),
+  pathWidth: _react.PropTypes.number,
+  pathMargin: _react.PropTypes.number,
+  endAngle: _react.PropTypes.number,
+  chartMargin: _react.PropTypes.number
 };
 PathGroup.defaultProps = {
   ease: 'easeBounce',
-  chartMargin: 50,
-  childRules: true
+  chartMargin: 20
 };
 exports.default = PathGroup;

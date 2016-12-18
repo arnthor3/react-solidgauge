@@ -20,6 +20,7 @@ export default class Path extends Component {
       // fill color
       fill: PropTypes.string,
     }),
+    filter: PropTypes.string,
     animate: PropTypes.bool,
     animateTime: PropTypes.number,
     ease: PropTypes.string,
@@ -30,12 +31,14 @@ export default class Path extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    childRules: PropTypes.bool,
   }
 
   static defaultProps = {
     animate: true,
     animateTime: 2000,
-    ease: 'easeSinInOut',
+    ease: 'easeBounce',
+    childRules: true,
   }
 
   componentDidMount() {
@@ -122,6 +125,7 @@ export default class Path extends Component {
   }
 
   render() {
+    console.log(this.props);
     const { children, ...noChildren } = this.props;
 
     // Copy the props and the state to pass it down to the children

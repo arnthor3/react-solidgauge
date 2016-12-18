@@ -74,7 +74,7 @@ var Chart = function (_Component) {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       if (this.props.responsive === true) {
-        window.removeEventlistener('resize', this.resize);
+        window.removeEventListener('resize', this.resize);
       }
     }
   }, {
@@ -98,16 +98,7 @@ var Chart = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var fill = void 0;
-
-      _react2.default.Children.forEach(this.props.children, function (_ref) {
-        var props = _ref.props;
-
-        if (props.liquid && props.liquid.fill) {
-          fill = props.liquid.fill;
-        }
-      });
-
+      // copy all the props excepct the children
       var _props = this.props,
           children = _props.children,
           noChildren = _objectWithoutProperties(_props, ['children']);
@@ -117,19 +108,24 @@ var Chart = function (_Component) {
 
       var props = Object.assign({}, noChildren, {
         width: this.state.width,
-        height: this.state.height,
-        fill: fill
+        height: this.state.height
       });
 
       // clone the children and pass in the props and state
       var cloneChildrenWithProps = (0, _cloneChildren2.default)(this.props.children, props, this.props.childRules);
-
-      // make the chart take up the whole width and height of the parent
-      var style = {
-        width: '100%',
-        height: '100%'
-      };
-      console.log(this.state.height);
+      var style = void 0;
+      // make the chart take up the whole width and height of the parent if its responsive
+      if (this.props.responsive) {
+        style = {
+          width: '100%',
+          height: '100%'
+        };
+      } else {
+        style = {
+          width: this.props.width,
+          height: this.props.height
+        };
+      }
 
       return _react2.default.createElement(
         'div',

@@ -17,14 +17,15 @@ var BackgroundPath = function BackgroundPath(_ref) {
   var arc = _ref.arc,
       fill = _ref.fill,
       stroke = _ref.stroke,
-      cY = _ref.cY;
+      filter = _ref.filter;
   return _react2.default.createElement(
     'g',
     null,
     _react2.default.createElement('path', {
       d: arc(),
       fill: fill,
-      stroke: stroke
+      stroke: stroke,
+      filter: filter
     })
   );
 };
@@ -33,7 +34,7 @@ BackgroundPath.propTypes = {
   arc: _react.PropTypes.func,
   fill: _react.PropTypes.string,
   stroke: _react.PropTypes.string,
-  cY: _react.PropTypes.number
+  filter: _react.PropTypes.string
 };
 
 BackgroundPath.defaultProps = {

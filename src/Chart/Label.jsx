@@ -13,7 +13,7 @@ const Label = ({ data, fontSize, fontSizeAuto, startPathCoordinates, pathWidth }
       stroke={data.stroke}
       textAnchor="end"
       dx={-15}
-      dy={(fontSize / 2) + (pathWidth / 4)}
+      dy={((fontSize / 2) + (pathWidth / 4)) || 0}
     >{data.label}</text>
   </g>
 );
@@ -34,7 +34,7 @@ Label.propTypes = {
 Label.defaultProps = {
   fill: '#ddd',
   stroke: '#aaa',
-  fontSizeAuto: true,
+  fontSize: '18',
 };
 
 export default Label;

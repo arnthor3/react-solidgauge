@@ -24,14 +24,7 @@ export default class PathGroup extends Component {
     pathWidth: PropTypes.number,
     pathMargin: PropTypes.number,
     endAngle: PropTypes.number,
-    margin: PropTypes.number,
     chartMargin: PropTypes.number,
-    data: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-      fill: PropTypes.string,
-      stroke: PropTypes.string,
-    }),
   }
 
   static defaultProps = {
@@ -65,7 +58,8 @@ export default class PathGroup extends Component {
     el.on('mouseleave', () => {
       tool
         .transition()
-        .delay(1000)
+        .duration(500)
+        .delay(500)
         .style('opacity', 0);
     });
   }
@@ -77,16 +71,15 @@ export default class PathGroup extends Component {
     const fullRadius = Math.min((this.props.height / 2) - (chartMargin / 2), this.props.width / 2);
     const width = this.props.pathWidth * fullRadius;
     const margin = this.props.pathMargin * fullRadius;
-
     return (
       <g
         transform="translate(0,20)"
         ref={(c) => { this.container = c; }}
       >
-      <ToolTip />
-      <g
-        ref={(c) => { this.mouseoverlay = c; }}
-      />
+        <ToolTip />
+        <g
+          ref={(c) => { this.mouseoverlay = c; }}
+        />
         {this.props.values.map((d, i) => {
           const marginAndWidth = width + margin;
 

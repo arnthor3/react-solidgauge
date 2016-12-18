@@ -4,7 +4,8 @@ import PathGroup from './PathGroup';
 import BackgroundPath from './BackgroundPath';
 import Label from './Label';
 import Path from './Path';
-
+import Mouse from './MouseContainerOverlay';
+import ReactIf from './ReactIf';
 
 const SolidGauge = props => (
   <Chart
@@ -17,8 +18,9 @@ const SolidGauge = props => (
         stroke={props.background.stroke}
       />
       <Label />
-      <Path />
+      <Path {...props} />
     </PathGroup>
+    {props.showMouse ? <Mouse /> : <g />}
   </Chart>
 );
 
@@ -27,6 +29,7 @@ SolidGauge.propTypes = {
     fill: PropTypes.string,
     stroke: PropTypes.string,
   }),
+  showMouse: PropTypes.bool,
 };
 
 export default SolidGauge;

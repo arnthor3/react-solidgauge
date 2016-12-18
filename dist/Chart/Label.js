@@ -13,7 +13,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Label = function Label(_ref) {
   var data = _ref.data,
       fontSize = _ref.fontSize,
-      startPathCoordinates = _ref.startPathCoordinates;
+      fontSizeAuto = _ref.fontSizeAuto,
+      startPathCoordinates = _ref.startPathCoordinates,
+      pathWidth = _ref.pathWidth;
   return _react2.default.createElement(
     'g',
     {
@@ -30,7 +32,7 @@ var Label = function Label(_ref) {
         stroke: data.stroke,
         textAnchor: 'end',
         dx: -15,
-        dy: 4.5
+        dy: fontSize / 2 + pathWidth / 4 || 0
       },
       data.label
     )
@@ -44,12 +46,15 @@ Label.propTypes = {
     label: _react.PropTypes.string
   }),
   fontSize: _react.PropTypes.string,
-  startPathCoordinates: _react.PropTypes.string
+  startPathCoordinates: _react.PropTypes.string,
+  pathWidth: _react.PropTypes.number,
+  fontSizeAuto: _react.PropTypes.bool
 };
 
 Label.defaultProps = {
   fill: '#ddd',
-  stroke: '#aaa'
+  stroke: '#aaa',
+  fontSize: '18'
 };
 
 exports.default = Label;

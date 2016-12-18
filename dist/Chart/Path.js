@@ -74,33 +74,41 @@ var Path = function (_Component) {
     value: function animate() {
       var _this2 = this;
 
+      // limit the value tops 100 and min 0
       var value = this.props.data.value > 100 ? 100 : this.props.data.value;
-      var el = (0, _d3Selection.select)(this.container).select('path');
+      value = value > 0 ? value : 0;
+
+      // Get the path element
+      var path = (0, _d3Selection.select)(this.container).select('path');
 
       var endCircle = (0, _d3Selection.select)(this.container).select('circle.solid-gauge-end');
+
       var easeFn = ease[this.props.ease] ? ease[this.props.ease] : ease.easeSinInOut;
-      el.datum([value]).transition().ease(easeFn).duration(4000).attrTween('d', function (_ref) {
+
+      path.datum([value]).transition().ease(easeFn).duration(this.props.animateTime).attrTween('d', function (_ref) {
         var _ref2 = _slicedToArray(_ref, 1),
             d = _ref2[0];
 
         var thisArc = _this2.props.arc;
 
         var scale = (0, _d3Scale.scaleLinear)().domain([0, 100]).range([0, _this2.props.endAngle]);
+        var interpolatePath = (0, _d3Interpolate.interpolate)(scale(path.node().old || 0), scale(value));
 
-        var interpolatePath = (0, _d3Interpolate.interpolate)(0, scale(value));
-        if (el.empty()) {
+        if (endCircle.empty()) {
           return function (t) {
             return thisArc.endAngle(interpolatePath(t))();
           };
         }
         return function (t) {
+          thisArc.endAngle(interpolatePath(t));
           var newArc = (0, _d3Shape.arc)().startAngle(thisArc.startAngle()() * 2).endAngle(thisArc.endAngle()() * 2).outerRadius(thisArc.outerRadius()()).innerRadius(thisArc.innerRadius()());
 
           endCircle.attr('transform', 'translate(' + newArc.centroid() + ')');
           return thisArc.endAngle(interpolatePath(t))();
         };
+      }).on('end', function () {
+        path.node().old = value;
       });
-      el.node().old = this.props.data.value;
     }
   }, {
     key: 'draw',
@@ -120,6 +128,8 @@ var Path = function (_Component) {
     key: 'render',
     value: function render() {
       var _this3 = this;
+
+      console.log(this.props);
 
       var _props = this.props,
           children = _props.children,
@@ -147,7 +157,8 @@ var Path = function (_Component) {
             _this3.path = c;
           },
           fill: this.props.data.fill,
-          stroke: this.props.data.stroke
+          stroke: this.props.data.stroke,
+          filter: this.props.filter
         }),
         cloneChildrenWithProps
       );
@@ -158,23 +169,31 @@ var Path = function (_Component) {
 }(_react.Component);
 
 Path.propTypes = {
+  // The thing that is being visualized and compared
   data: _react.PropTypes.shape({
+    // value number between 0 and 100
     value: _react.PropTypes.number,
+    // name of data value
     label: _react.PropTypes.string,
+    // stroke color
     stroke: _react.PropTypes.string,
+    // fill color
     fill: _react.PropTypes.string
   }),
+  filter: _react.PropTypes.string,
   animate: _react.PropTypes.bool,
   animateTime: _react.PropTypes.number,
   ease: _react.PropTypes.string,
   arc: _react.PropTypes.func,
   endAngle: _react.PropTypes.number,
   cY: _react.PropTypes.number,
-  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node])
+  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
+  childRules: _react.PropTypes.bool
 };
 Path.defaultProps = {
   animate: true,
   animateTime: 2000,
-  ease: 'easeSinInOut'
+  ease: 'easeBounce',
+  childRules: true
 };
 exports.default = Path;

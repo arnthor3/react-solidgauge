@@ -39,11 +39,13 @@ export default class PathGroup extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
+    childRules: PropTypes.bool,
   }
 
   static defaultProps = {
     ease: 'easeBounce',
-    chartMargin: 20,
+    chartMargin: 50,
+    childRules: true,
   };
 
   render() {
@@ -52,10 +54,10 @@ export default class PathGroup extends Component {
     const fullRadius = Math.min((this.props.height / 2) - (chartMargin / 2), this.props.width / 2);
     const width = this.props.pathWidth * fullRadius;
     const margin = this.props.pathMargin * fullRadius;
-
+    console.log(this.props);
     return (
       <g
-        transform="translate(0,20)"
+        transform={`translate(0,${chartMargin / 2})`}
         ref={(c) => { this.container = c; }}
       >
         {this.props.values.map((d, i) => {
@@ -84,10 +86,12 @@ export default class PathGroup extends Component {
             data: d,
             startPathCoordinates: thisArc().split('A')[0].split('M')[1],
             pathWidth: width,
+            ease: this.props.ease,
           });
 
           // Clone the children and pass in the props and state
-          const cloneChildrenWithProps = cloneComponents(this.props.children, props);
+          const cloneChildrenWithProps = cloneComponents(
+            this.props.children, props, this.childRules);
 
           return (
             <g

@@ -34,21 +34,21 @@ class ChartSG extends Component {
       >
         <Chart
           responsive
-          pathWidth={0.1}
-          pathMargin={0.05}
+          pathWidth={0.01}
+          pathMargin={0.15}
           endAngle={Math.PI * 1.5}
           values={values}
-          cornerRadius={120}
         >
-
           <PathGroup>
-            <BackgroundPath />
+            <BackgroundPath
+            />
             <Label
               fontSize={20}
             />
             <Path
               ease="easeBounce"
             >
+            <EndCircle r={10} />
             </Path>
           </PathGroup>
           <ToolTip />
@@ -68,19 +68,19 @@ const chart2 = (
   >
     <SolidGauge
       responsive
-      margin={0.05}
-      pathWidth={25}
-      pathMargin={5}
+      margin={50}
+      pathWidth={0.1}
+      pathMargin={0.1}
+      values={values}
       circle
-      ease="easeBounce"
+      ease="easeLinear"
       background={{
         fill: '#ccc',
         stroke: '#999',
       }}
       animate
-      animateTime={100}
+      animateTime={5000}
       endAngle={Math.PI * 1.5}
-      values={values}
     />
   </div>
 );
