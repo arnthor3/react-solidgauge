@@ -2,9 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import { arc } from 'd3-shape';
-import { select } from 'd3-selection';
-import { PathGroup } from '../src/index';
+import SolidGauge, { Chart, PathGroup, Path, ToolTip } from '../src/index';
 
 const values = [
   { label: 'Email Campaign', value: 189, fill: '#881' },
@@ -13,16 +11,22 @@ const values = [
   { label: 'Facebook Campaign', value: 29, fill: '#bb4' },
 ];
 
-describe('<PathGroup />', () => {
+
+describe('<SolidGauge />', () => {
   it('should render', () => {
     const wrapper = mount(
-      <PathGroup
+      <SolidGauge
+        responsive
         values={values}
-        width={400}
-        height={400}
-        endAngle={Math.PI * 2}
-      />,
-    );
-
+        circleRadius={2}
+        pathMargin={0.2}
+        pathWidth={0.1}
+        fontSize={20}
+        showTooltip
+        background={{
+          fill: 'red',
+          stroke: 'pink',
+        }}
+    />);
   });
 });

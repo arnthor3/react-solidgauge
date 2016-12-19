@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import SolidGauge, { Chart, Path, PathGroup, BackgroundPath, EndCircle, Label, Shadow, ToolTip, Glow } from '../src/';
+import SolidGauge from '../src/';
 
 
 const values = [
@@ -32,58 +32,24 @@ class ChartSG extends Component {
         }}
         onClick={this.onClick}
       >
-        <Chart
+        <SolidGauge
           responsive
           pathWidth={0.01}
           pathMargin={0.15}
           endAngle={Math.PI * 1.5}
           values={values}
-        >
-          <PathGroup>
-            <BackgroundPath
-            />
-            <Label
-              fontSize={20}
-            />
-            <Path
-              ease="easeBounce"
-            >
-            <EndCircle r={10} />
-            </Path>
-          </PathGroup>
-          <ToolTip />
-        </Chart>
+          ease="easeBounce"
+          background={{
+            fill: '#ccc',
+            stroke: '#999',
+          }}
+          animateTime={1000}
+          showTooltip
+          circleRadius={10}
+        />
       </div>
     );
   }
 }
-
-const chart2 = (
-  <div
-    style={{
-      marginTop: '50px',
-      width: '100%',
-      height: '500px',
-    }}
-  >
-    <SolidGauge
-      responsive
-      margin={50}
-      pathWidth={0.1}
-      pathMargin={0.1}
-      values={values}
-      circle
-      ease="easeLinear"
-      background={{
-        fill: '#ccc',
-        stroke: '#999',
-      }}
-      animate
-      animateTime={5000}
-      endAngle={Math.PI * 1.5}
-    />
-  </div>
-);
-
 
 render(<ChartSG />, document.getElementById('app'));

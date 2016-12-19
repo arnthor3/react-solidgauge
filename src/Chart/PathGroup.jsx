@@ -10,31 +10,28 @@ const fillStroke = PropTypes.shape({
   stroke: PropTypes.string,
 });
 
+const shape = PropTypes.shape({
+  value: PropTypes.number,
+  label: PropTypes.string,
+  fill: PropTypes.string,
+  stroke: PropTypes.string,
+});
+
 export default class PathGroup extends Component {
   static propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
-    values: PropTypes.arrayOf(
-      PropTypes.shape({
-
-      }),
-    ),
-    ease: PropTypes.string,
+    values: PropTypes.arrayOf(shape),
     pathWidth: PropTypes.number,
     pathMargin: PropTypes.number,
     iter: PropTypes.number,
     endAngle: PropTypes.number,
     cornerRadius: PropTypes.number,
     background: fillStroke,
-    fontSize: PropTypes.string,
+    fontSize: PropTypes.number,
     margin: PropTypes.number,
     chartMargin: PropTypes.number,
-    data: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-      fill: PropTypes.string,
-      stroke: PropTypes.string,
-    }),
+    data: shape,
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
@@ -46,6 +43,10 @@ export default class PathGroup extends Component {
     ease: 'easeBounce',
     chartMargin: 50,
     childRules: true,
+    background: {
+      fill: '#ddd',
+      stroke: '#aaa',
+    },
   };
 
   render() {
@@ -54,7 +55,6 @@ export default class PathGroup extends Component {
     const fullRadius = Math.min((this.props.height / 2) - (chartMargin / 2), this.props.width / 2);
     const width = this.props.pathWidth * fullRadius;
     const margin = this.props.pathMargin * fullRadius;
-    console.log(this.props);
     return (
       <g
         transform={`translate(0,${chartMargin / 2})`}
@@ -77,16 +77,9 @@ export default class PathGroup extends Component {
 
           // Copy the props and the state to pass it down to the children
           const props = Object.assign({}, noChildren, {
-            marginAndWidth,
-            cX,
-            cY,
-            radius,
-            outer,
             arc: thisArc,
             data: d,
-            startPathCoordinates: thisArc().split('A')[0].split('M')[1],
             pathWidth: width,
-            ease: this.props.ease,
           });
 
           // Clone the children and pass in the props and state
@@ -99,6 +92,24 @@ export default class PathGroup extends Component {
               transform={`translate(0,${i * marginAndWidth})`}
             >
               <g transform={`translate(${cX},${cY})`}>
+                <path
+                  d={thisArc()}
+                  fill={this.props.background.fill}
+                  stroke={this.props.background.stroke}
+                />
+                <g transform={`translate(${thisArc().split('A')[0].split('M')[1]})`} >
+                  <text
+                    style={{
+                      pointerEvent: 'none',
+                    }}
+                    fontSize={this.props.fontSize}
+                    fill={d.fill}
+                    stroke={d.stroke}
+                    textAnchor="end"
+                    dx={-15}
+                    dy={((this.props.fontSize / 2) + (width / 4)) || 0}
+                  >{d.label}</text>
+                </g>
                 {cloneChildrenWithProps}
               </g>
             </g>

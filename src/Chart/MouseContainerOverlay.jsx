@@ -49,7 +49,7 @@ export default class PathGroup extends Component {
       const { fill, value } = this.props.values[iter - 1];
       const pos = mouse(el.node());
 
-      tool.style('opacity', 1);
+      tool.transition().attr('opacity', 1);
       tool.select('path').attr('stroke', fill);
       tool.select('text').text(`${Math.floor(value)}%`);
       tool.attr('transform', `translate(${pos[0] - 26},${pos[1] - 64})`);
@@ -60,7 +60,7 @@ export default class PathGroup extends Component {
         .transition()
         .duration(500)
         .delay(500)
-        .style('opacity', 0);
+        .attr('opacity', 0);
     });
   }
 

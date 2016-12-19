@@ -1,35 +1,78 @@
 import React, { PropTypes } from 'react';
 import Chart from './Chart';
 import PathGroup from './PathGroup';
-import BackgroundPath from './BackgroundPath';
-import Label from './Label';
 import Path from './Path';
 import Mouse from './MouseContainerOverlay';
-import ReactIf from './ReactIf';
+
+const dataShape = PropTypes.shape({
+  value: PropTypes.number,
+  label: PropTypes.string,
+  fill: PropTypes.string,
+  stroke: PropTypes.string,
+});
 
 const SolidGauge = props => (
   <Chart
-    childRules={false}
-    {...props}
+    responsive={props.responsive}
+    width={props.width}
+    height={props.height}
   >
-    <PathGroup>
-      <BackgroundPath
-        fill={props.background.fill}
-        stroke={props.background.stroke}
+    <PathGroup
+      background={props.background}
+      pathWidth={props.pathWidth}
+      pathMargin={props.pathMargin}
+      chartMargin={props.chartMargin}
+      values={props.values}
+      endAngle={props.endAngle}
+      fontSize={props.fontSize}
+    >
+      <Path
+        ease={props.ease}
+        animate={props.animate}
+        animateTime={props.animateTime}
+        circleRadius={props.circleRadius}
+        endAngle={props.endAngle}
       />
-      <Label />
-      <Path {...props} />
     </PathGroup>
-    {props.showMouse ? <Mouse /> : <g />}
+    {props.showTooltip ? (
+      <Mouse
+        endAngle={props.endAngle}
+        pathWidth={props.pathWidth}
+        pathMargin={props.pathMargin}
+        values={props.values}
+      />) : <g />}
   </Chart>
 );
 
+const fillStroke = PropTypes.shape({
+  fill: PropTypes.string,
+  stroke: PropTypes.string,
+});
+
+const shape = PropTypes.shape({
+  value: PropTypes.number,
+  label: PropTypes.string,
+  fill: PropTypes.string,
+  stroke: PropTypes.string,
+});
+
+
 SolidGauge.propTypes = {
-  background: PropTypes.shape({
-    fill: PropTypes.string,
-    stroke: PropTypes.string,
-  }),
-  showMouse: PropTypes.bool,
+  responsive: PropTypes.bool,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  values: PropTypes.arrayOf(shape),
+  pathWidth: PropTypes.number,
+  pathMargin: PropTypes.number,
+  endAngle: PropTypes.number,
+  background: fillStroke,
+  fontSize: PropTypes.number,
+  chartMargin: PropTypes.number,
+  showTooltip: PropTypes.bool,
+  animate: PropTypes.bool,
+  animateTime: PropTypes.number,
+  ease: PropTypes.string,
+  circleRadius: PropTypes.number,
 };
 
 export default SolidGauge;

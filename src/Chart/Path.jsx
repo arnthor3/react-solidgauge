@@ -5,7 +5,7 @@ import { select, selectAll } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { interpolate } from 'd3-interpolate';
 import 'd3-transition';
-import cloneComponents from './cloneChildren';
+import ReactIf from './ReactIf';
 
 export default class Path extends Component {
   static propTypes = {
@@ -20,29 +20,20 @@ export default class Path extends Component {
       // fill color
       fill: PropTypes.string,
     }),
-    filter: PropTypes.string,
-    animate: PropTypes.bool,
     animateTime: PropTypes.number,
     ease: PropTypes.string,
     arc: PropTypes.func,
     endAngle: PropTypes.number,
-    cY: PropTypes.number,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
-    childRules: PropTypes.bool,
+    circleRadius: PropTypes.number,
   }
 
   static defaultProps = {
-    animate: true,
-    animateTime: 2000,
+    animateTime: 0,
     ease: 'easeBounce',
-    childRules: true,
   }
 
   componentDidMount() {
-    if (this.props.animate) {
+    if (this.props.animateTime) {
       this.animate();
       return;
     }
@@ -50,7 +41,7 @@ export default class Path extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.animate) {
+    if (this.props.animateTime) {
       this.animate();
       return;
     }
@@ -103,6 +94,8 @@ export default class Path extends Component {
   }
 
   draw() {
+    // limit the value tops 100 and min 0
+    let value = this.props.data.value > 100 ? 100 : this.props.data.value;
     const thisArc = this.props.arc;
     const el = select(this.container).select('path');
 
@@ -112,7 +105,7 @@ export default class Path extends Component {
                         .range([0, this.props.endAngle]);
     el
       .datum([this.props.data.value])
-      .attr('d', thisArc.endAngle(scale(this.props.data.value)));
+      .attr('d', thisArc.endAngle(scale(value)));
     if (!endCircle.empty()) {
       const newArc = arc()
                           .startAngle(thisArc.startAngle()() * 2)
@@ -125,17 +118,6 @@ export default class Path extends Component {
   }
 
   render() {
-    console.log(this.props);
-    const { children, ...noChildren } = this.props;
-
-    // Copy the props and the state to pass it down to the children
-    const props = Object.assign({}, noChildren, {
-      parentFill: this.props.data.fill,
-      parentStroke: this.props.data.stroke,
-    });
-
-    // Clone the children and pass in the props and state
-    const cloneChildrenWithProps = cloneComponents(children, props);
     return (
       <g
         ref={(c) => { this.container = c; }}
@@ -144,9 +126,15 @@ export default class Path extends Component {
           ref={(c) => { this.path = c; }}
           fill={this.props.data.fill}
           stroke={this.props.data.stroke}
-          filter={this.props.filter}
         />
-        {cloneChildrenWithProps}
+        { this.props.circleRadius ?
+          <circle
+            stroke={this.props.data.stroke}
+            fill={this.props.data.fill}
+            r={this.props.circleRadius}
+            className="solid-gauge-end"
+          /> : <g />
+        }
       </g>
     );
   }

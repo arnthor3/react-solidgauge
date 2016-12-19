@@ -16,7 +16,6 @@ export default class Chart extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
     ]),
-    childRules: PropTypes.bool,
   }
 
   constructor(props) {
@@ -78,8 +77,7 @@ export default class Chart extends Component {
     // clone the children and pass in the props and state
     const cloneChildrenWithProps = cloneComponents(
                                     this.props.children,
-                                    props,
-                                    this.props.childRules);
+                                    props);
     let style;
     // make the chart take up the whole width and height of the parent if its responsive
     if (this.props.responsive) {

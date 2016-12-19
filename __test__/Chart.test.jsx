@@ -13,6 +13,7 @@ describe('<Chart />', () => {
         responsive
       >
         <G />
+        <path />
       </Chart>,
     );
     // it calls onResize when the chart inits
