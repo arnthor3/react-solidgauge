@@ -113,6 +113,7 @@ var Path = function (_Component) {
     value: function draw() {
       // limit the value tops 100 and min 0
       var value = this.props.data.value > 100 ? 100 : this.props.data.value;
+      value = value > 0 ? value : 0;
       var thisArc = this.props.arc;
       var el = (0, _d3Selection.select)(this.container).select('path');
 
