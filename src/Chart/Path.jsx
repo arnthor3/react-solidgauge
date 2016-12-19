@@ -96,6 +96,7 @@ export default class Path extends Component {
   draw() {
     // limit the value tops 100 and min 0
     let value = this.props.data.value > 100 ? 100 : this.props.data.value;
+    value = value > 0 ? value : 0;
     const thisArc = this.props.arc;
     const el = select(this.container).select('path');
 

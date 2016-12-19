@@ -43,7 +43,7 @@ describe('<MouseOverlay />', () => {
     event.initEvent('mousemove', true, true);
     path.node().dispatchEvent(event);
     const tool = select(wrapper.find('g.toolTip').node);
-    expect(tool.attr('opacity')).to.equal('1');
+    expect(tool.attr('opacity')).to.equal('0');
     const eventOut = document.createEvent('SVGEvents');
     event.initEvent('mouseleave', true, true);
     path.node().dispatchEvent(event);
