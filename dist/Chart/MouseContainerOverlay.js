@@ -70,14 +70,14 @@ var PathGroup = function (_Component) {
 
         var pos = (0, _d3Selection.mouse)(el.node());
 
-        tool.style('opacity', 1);
+        tool.transition().attr('opacity', 1);
         tool.select('path').attr('stroke', fill);
         tool.select('text').text(Math.floor(value) + '%');
         tool.attr('transform', 'translate(' + (pos[0] - 26) + ',' + (pos[1] - 64) + ')');
       });
 
       el.on('mouseleave', function () {
-        tool.transition().duration(500).delay(500).style('opacity', 0);
+        tool.transition().duration(500).delay(500).attr('opacity', 0);
       });
     }
   }, {

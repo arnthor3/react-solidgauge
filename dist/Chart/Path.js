@@ -26,15 +26,13 @@ var _d3Interpolate = require('d3-interpolate');
 
 require('d3-transition');
 
-var _cloneChildren = require('./cloneChildren');
+var _ReactIf = require('./ReactIf');
 
-var _cloneChildren2 = _interopRequireDefault(_cloneChildren);
+var _ReactIf2 = _interopRequireDefault(_ReactIf);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -54,7 +52,7 @@ var Path = function (_Component) {
   _createClass(Path, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (this.props.animate) {
+      if (this.props.animateTime) {
         this.animate();
         return;
       }
@@ -63,7 +61,7 @@ var Path = function (_Component) {
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      if (this.props.animate) {
+      if (this.props.animateTime) {
         this.animate();
         return;
       }
@@ -113,12 +111,14 @@ var Path = function (_Component) {
   }, {
     key: 'draw',
     value: function draw() {
+      // limit the value tops 100 and min 0
+      var value = this.props.data.value > 100 ? 100 : this.props.data.value;
       var thisArc = this.props.arc;
       var el = (0, _d3Selection.select)(this.container).select('path');
 
       var endCircle = (0, _d3Selection.select)(this.container).select('circle.solid-gauge-end');
       var scale = (0, _d3Scale.scaleLinear)().domain([0, 100]).range([0, this.props.endAngle]);
-      el.datum([this.props.data.value]).attr('d', thisArc.endAngle(scale(this.props.data.value)));
+      el.datum([this.props.data.value]).attr('d', thisArc.endAngle(scale(value)));
       if (!endCircle.empty()) {
         var newArc = (0, _d3Shape.arc)().startAngle(thisArc.startAngle()() * 2).endAngle(thisArc.endAngle()() * 2).outerRadius(thisArc.outerRadius()()).innerRadius(thisArc.innerRadius()());
         endCircle.attr('transform', 'translate(' + newArc.centroid() + ')');
@@ -129,22 +129,6 @@ var Path = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      console.log(this.props);
-
-      var _props = this.props,
-          children = _props.children,
-          noChildren = _objectWithoutProperties(_props, ['children']);
-
-      // Copy the props and the state to pass it down to the children
-
-
-      var props = Object.assign({}, noChildren, {
-        parentFill: this.props.data.fill,
-        parentStroke: this.props.data.stroke
-      });
-
-      // Clone the children and pass in the props and state
-      var cloneChildrenWithProps = (0, _cloneChildren2.default)(children, props);
       return _react2.default.createElement(
         'g',
         {
@@ -157,10 +141,14 @@ var Path = function (_Component) {
             _this3.path = c;
           },
           fill: this.props.data.fill,
-          stroke: this.props.data.stroke,
-          filter: this.props.filter
+          stroke: this.props.data.stroke
         }),
-        cloneChildrenWithProps
+        this.props.circleRadius ? _react2.default.createElement('circle', {
+          stroke: this.props.data.stroke,
+          fill: this.props.data.fill,
+          r: this.props.circleRadius,
+          className: 'solid-gauge-end'
+        }) : _react2.default.createElement('g', null)
       );
     }
   }]);
@@ -180,20 +168,14 @@ Path.propTypes = {
     // fill color
     fill: _react.PropTypes.string
   }),
-  filter: _react.PropTypes.string,
-  animate: _react.PropTypes.bool,
   animateTime: _react.PropTypes.number,
   ease: _react.PropTypes.string,
   arc: _react.PropTypes.func,
   endAngle: _react.PropTypes.number,
-  cY: _react.PropTypes.number,
-  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
-  childRules: _react.PropTypes.bool
+  circleRadius: _react.PropTypes.number
 };
 Path.defaultProps = {
-  animate: true,
-  animateTime: 2000,
-  ease: 'easeBounce',
-  childRules: true
+  animateTime: 0,
+  ease: 'easeBounce'
 };
 exports.default = Path;

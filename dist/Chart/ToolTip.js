@@ -21,8 +21,8 @@ var ToolTip = function ToolTip() {
       'text',
       {
         dy: '30',
-        dx: '20',
-        textAnchor: 'start'
+        dx: '32',
+        textAnchor: 'middle'
       },
       '64%'
     )

@@ -112,7 +112,7 @@ var Chart = function (_Component) {
       });
 
       // clone the children and pass in the props and state
-      var cloneChildrenWithProps = (0, _cloneChildren2.default)(this.props.children, props, this.props.childRules);
+      var cloneChildrenWithProps = (0, _cloneChildren2.default)(this.props.children, props);
       var style = void 0;
       // make the chart take up the whole width and height of the parent if its responsive
       if (this.props.responsive) {
@@ -161,7 +161,6 @@ Chart.propTypes = {
   width: _react.PropTypes.number,
   height: _react.PropTypes.number,
   // the chart components
-  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
-  childRules: _react.PropTypes.bool
+  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node])
 };
 exports.default = Chart;

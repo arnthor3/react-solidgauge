@@ -35,6 +35,13 @@ var fillStroke = _react.PropTypes.shape({
   stroke: _react.PropTypes.string
 });
 
+var shape = _react.PropTypes.shape({
+  value: _react.PropTypes.number,
+  label: _react.PropTypes.string,
+  fill: _react.PropTypes.string,
+  stroke: _react.PropTypes.string
+});
+
 var PathGroup = function (_Component) {
   _inherits(PathGroup, _Component);
 
@@ -54,7 +61,6 @@ var PathGroup = function (_Component) {
       var fullRadius = Math.min(this.props.height / 2 - chartMargin / 2, this.props.width / 2);
       var width = this.props.pathWidth * fullRadius;
       var margin = this.props.pathMargin * fullRadius;
-      console.log(this.props);
       return _react2.default.createElement(
         'g',
         {
@@ -80,16 +86,9 @@ var PathGroup = function (_Component) {
 
 
           var props = Object.assign({}, noChildren, {
-            marginAndWidth: marginAndWidth,
-            cX: cX,
-            cY: cY,
-            radius: radius,
-            outer: outer,
             arc: thisArc,
             data: d,
-            startPathCoordinates: thisArc().split('A')[0].split('M')[1],
-            pathWidth: width,
-            ease: _this2.props.ease
+            pathWidth: width
           });
 
           // Clone the children and pass in the props and state
@@ -104,6 +103,30 @@ var PathGroup = function (_Component) {
             _react2.default.createElement(
               'g',
               { transform: 'translate(' + cX + ',' + cY + ')' },
+              _react2.default.createElement('path', {
+                d: thisArc(),
+                fill: _this2.props.background.fill,
+                stroke: _this2.props.background.stroke
+              }),
+              _react2.default.createElement(
+                'g',
+                { transform: 'translate(' + thisArc().split('A')[0].split('M')[1] + ')' },
+                _react2.default.createElement(
+                  'text',
+                  {
+                    style: {
+                      pointerEvent: 'none'
+                    },
+                    fontSize: _this2.props.fontSize,
+                    fill: d.fill,
+                    stroke: d.stroke,
+                    textAnchor: 'end',
+                    dx: -15,
+                    dy: _this2.props.fontSize / 2 + width / 4 || 0
+                  },
+                  d.label
+                )
+              ),
               cloneChildrenWithProps
             )
           );
@@ -118,29 +141,27 @@ var PathGroup = function (_Component) {
 PathGroup.propTypes = {
   width: _react.PropTypes.number,
   height: _react.PropTypes.number,
-  values: _react.PropTypes.arrayOf(_react.PropTypes.shape({})),
-  ease: _react.PropTypes.string,
+  values: _react.PropTypes.arrayOf(shape),
   pathWidth: _react.PropTypes.number,
   pathMargin: _react.PropTypes.number,
   iter: _react.PropTypes.number,
   endAngle: _react.PropTypes.number,
   cornerRadius: _react.PropTypes.number,
   background: fillStroke,
-  fontSize: _react.PropTypes.string,
+  fontSize: _react.PropTypes.number,
   margin: _react.PropTypes.number,
   chartMargin: _react.PropTypes.number,
-  data: _react.PropTypes.shape({
-    value: _react.PropTypes.number,
-    label: _react.PropTypes.string,
-    fill: _react.PropTypes.string,
-    stroke: _react.PropTypes.string
-  }),
+  data: shape,
   children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
   childRules: _react.PropTypes.bool
 };
 PathGroup.defaultProps = {
   ease: 'easeBounce',
   chartMargin: 50,
-  childRules: true
+  childRules: true,
+  background: {
+    fill: '#ddd',
+    stroke: '#aaa'
+  }
 };
 exports.default = PathGroup;

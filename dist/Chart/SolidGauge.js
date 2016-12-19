@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -18,14 +16,6 @@ var _PathGroup = require('./PathGroup');
 
 var _PathGroup2 = _interopRequireDefault(_PathGroup);
 
-var _BackgroundPath = require('./BackgroundPath');
-
-var _BackgroundPath2 = _interopRequireDefault(_BackgroundPath);
-
-var _Label = require('./Label');
-
-var _Label2 = _interopRequireDefault(_Label);
-
 var _Path = require('./Path');
 
 var _Path2 = _interopRequireDefault(_Path);
@@ -34,38 +24,79 @@ var _MouseContainerOverlay = require('./MouseContainerOverlay');
 
 var _MouseContainerOverlay2 = _interopRequireDefault(_MouseContainerOverlay);
 
-var _ReactIf = require('./ReactIf');
-
-var _ReactIf2 = _interopRequireDefault(_ReactIf);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var dataShape = _react.PropTypes.shape({
+  value: _react.PropTypes.number,
+  label: _react.PropTypes.string,
+  fill: _react.PropTypes.string,
+  stroke: _react.PropTypes.string
+});
 
 var SolidGauge = function SolidGauge(props) {
   return _react2.default.createElement(
     _Chart2.default,
-    _extends({
-      childRules: false
-    }, props),
+    {
+      responsive: props.responsive,
+      width: props.width,
+      height: props.height
+    },
     _react2.default.createElement(
       _PathGroup2.default,
-      null,
-      _react2.default.createElement(_BackgroundPath2.default, {
-        fill: props.background.fill,
-        stroke: props.background.stroke
-      }),
-      _react2.default.createElement(_Label2.default, null),
-      _react2.default.createElement(_Path2.default, props)
+      {
+        background: props.background,
+        pathWidth: props.pathWidth,
+        pathMargin: props.pathMargin,
+        chartMargin: props.chartMargin,
+        values: props.values,
+        endAngle: props.endAngle,
+        fontSize: props.fontSize
+      },
+      _react2.default.createElement(_Path2.default, {
+        ease: props.ease,
+        animate: props.animate,
+        animateTime: props.animateTime,
+        circleRadius: props.circleRadius,
+        endAngle: props.endAngle
+      })
     ),
-    props.showMouse ? _react2.default.createElement(_MouseContainerOverlay2.default, null) : _react2.default.createElement('g', null)
+    props.showTooltip ? _react2.default.createElement(_MouseContainerOverlay2.default, {
+      endAngle: props.endAngle,
+      pathWidth: props.pathWidth,
+      pathMargin: props.pathMargin,
+      values: props.values
+    }) : _react2.default.createElement('g', null)
   );
 };
 
+var fillStroke = _react.PropTypes.shape({
+  fill: _react.PropTypes.string,
+  stroke: _react.PropTypes.string
+});
+
+var shape = _react.PropTypes.shape({
+  value: _react.PropTypes.number,
+  label: _react.PropTypes.string,
+  fill: _react.PropTypes.string,
+  stroke: _react.PropTypes.string
+});
+
 SolidGauge.propTypes = {
-  background: _react.PropTypes.shape({
-    fill: _react.PropTypes.string,
-    stroke: _react.PropTypes.string
-  }),
-  showMouse: _react.PropTypes.bool
+  responsive: _react.PropTypes.bool,
+  width: _react.PropTypes.number,
+  height: _react.PropTypes.number,
+  values: _react.PropTypes.arrayOf(shape),
+  pathWidth: _react.PropTypes.number,
+  pathMargin: _react.PropTypes.number,
+  endAngle: _react.PropTypes.number,
+  background: fillStroke,
+  fontSize: _react.PropTypes.number,
+  chartMargin: _react.PropTypes.number,
+  showTooltip: _react.PropTypes.bool,
+  animate: _react.PropTypes.bool,
+  animateTime: _react.PropTypes.number,
+  ease: _react.PropTypes.string,
+  circleRadius: _react.PropTypes.number
 };
 
 exports.default = SolidGauge;
