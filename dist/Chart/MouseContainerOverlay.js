@@ -70,7 +70,7 @@ var PathGroup = function (_Component) {
 
         var pos = (0, _d3Selection.mouse)(el.node());
 
-        tool.transition().attr('opacity', 1);
+        tool.transition().duration(0).attr('opacity', 1);
         tool.select('path').attr('stroke', fill);
         tool.select('text').text(Math.floor(value) + '%');
         tool.attr('transform', 'translate(' + (pos[0] - 26) + ',' + (pos[1] - 64) + ')');

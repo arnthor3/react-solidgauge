@@ -43,7 +43,7 @@ class ChartSG extends Component {
             fill: '#ccc',
             stroke: '#999',
           }}
-          animateTime={1000}
+          animateTime={1500}
           showTooltip
           circleRadius={10}
         />

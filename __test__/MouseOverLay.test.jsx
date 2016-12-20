@@ -41,15 +41,34 @@ describe('<MouseOverlay />', () => {
     const path = select(wrapper.find('path').nodes[0]);
     const event = document.createEvent('SVGEvents');
     event.initEvent('mousemove', true, true);
-    path.node().dispatchEvent(event);
     const tool = select(wrapper.find('g.toolTip').node);
-    expect(tool.attr('opacity')).to.equal('0');
-    const eventOut = document.createEvent('SVGEvents');
-    event.initEvent('mouseleave', true, true);
     path.node().dispatchEvent(event);
+    setTimeout(() => {
+      expect(tool.attr('opacity')).not.to.equal('0');
+      done();
+    }, 750);
+  });
+  it('should listen to mouseleave', (done) => {
+    const wrapper = mount(
+      <ToolTip
+        values={values}
+        width={400}
+        height={400}
+        endAngle={Math.PI * 2}
+        arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(10).innerRadius(0)}
+      />,
+    );
+    const path = select(wrapper.find('path').nodes[0]);
+    const tool = select(wrapper.find('g.toolTip').node);
+    tool.attr('opacity', '1');
+    const eventOut = document.createEvent('SVGEvents');
+    eventOut.initEvent('mouseleave', true, true);
+    path.node().dispatchEvent(eventOut);
+
+
     setTimeout(() => {
       expect(tool.attr('opacity')).not.to.equal('1');
       done();
-    }, 1000);
+    }, 750);
   });
 });
