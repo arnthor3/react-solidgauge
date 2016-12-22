@@ -40,7 +40,7 @@ fontSize|string|*null*|Sets the fontsize for lables
 animateTime|number|*2000*|The length of the animation in ms, if this number is set then the paths will animate
 ease|string|*easeBackIn*| The name of the easing function that's being used check out d3-easing project for a complete list of easing functions
 showTooltip|bool|*true*| If true then show the tooltip
-circleRadius|*null*|If this prop is set then the chart will add a circle to the end of that path.
+circleRadius|number|*null*|If this prop is set then the chart will add a circle to the end of the path.
 
 ### Using SolidGauge
 
