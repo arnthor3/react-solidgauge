@@ -25,6 +25,7 @@ const SolidGauge = props => (
       values={props.values}
       endAngle={props.endAngle}
       fontSize={props.fontSize}
+      enterAnimation={props.enterAnimation}
     >
       <Path
         ease={props.ease}
@@ -36,10 +37,13 @@ const SolidGauge = props => (
     </PathGroup>
     {props.showTooltip ? (
       <Mouse
+        chartMargin={props.chartMargin}
         endAngle={props.endAngle}
         pathWidth={props.pathWidth}
         pathMargin={props.pathMargin}
         values={props.values}
+        mouseFill={props.mouseFill}
+        mouseStrokeWidth={props.mouseStrokeWidth}
       />) : <g />}
   </Chart>
 );
@@ -58,6 +62,7 @@ const shape = PropTypes.shape({
 
 
 SolidGauge.propTypes = {
+  enterAnimation: PropTypes.bool,
   responsive: PropTypes.bool,
   width: PropTypes.number,
   height: PropTypes.number,
@@ -73,6 +78,12 @@ SolidGauge.propTypes = {
   animateTime: PropTypes.number,
   ease: PropTypes.string,
   circleRadius: PropTypes.number,
+  mouseFill: PropTypes.string,
+  mouseStrokeWidth: PropTypes.number,
+};
+
+SolidGauge.defaultProps = {
+  chartMargin: 50,
 };
 
 export default SolidGauge;

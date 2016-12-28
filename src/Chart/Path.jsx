@@ -5,7 +5,6 @@ import { select, selectAll } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { interpolate } from 'd3-interpolate';
 import 'd3-transition';
-import ReactIf from './ReactIf';
 
 export default class Path extends Component {
   static propTypes = {
@@ -34,7 +33,7 @@ export default class Path extends Component {
 
   componentDidMount() {
     if (this.props.animateTime) {
-      this.animate();
+      this.animate(300);
       return;
     }
     this.draw();
@@ -42,13 +41,13 @@ export default class Path extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.animateTime) {
-      this.animate();
+      this.animate(0);
       return;
     }
     this.draw();
   }
 
-  animate() {
+  animate(delay) {
     // limit the value tops 100 and min 0
     let value = this.props.data.value > 100 ? 100 : this.props.data.value;
     value = value > 0 ? value : 0;
@@ -63,6 +62,7 @@ export default class Path extends Component {
     path
       .datum([value])
       .transition()
+      .delay(delay)
       .ease(easeFn)
       .duration(this.props.animateTime)
       .attrTween('d', ([d]) => {

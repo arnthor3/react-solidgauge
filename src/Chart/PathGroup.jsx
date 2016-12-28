@@ -41,7 +41,6 @@ export default class PathGroup extends Component {
 
   static defaultProps = {
     ease: 'easeBounce',
-    chartMargin: 50,
     childRules: true,
     background: {
       fill: '#ddd',
@@ -107,7 +106,7 @@ export default class PathGroup extends Component {
                     stroke={d.stroke}
                     textAnchor="end"
                     dx={-15}
-                    dy={((this.props.fontSize / 2) + (width / 4)) || 0}
+                    dy={width / 2}
                   >{d.label}</text>
                 </g>
                 {cloneChildrenWithProps}

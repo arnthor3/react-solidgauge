@@ -3,12 +3,12 @@ import { arc } from 'd3-shape';
 import { select, selectAll, mouse } from 'd3-selection';
 import cloneComponents from './cloneChildren';
 import ToolTip from './ToolTip';
+import * as tip from './ToolTipSvg';
 
 const fillStroke = PropTypes.shape({
   fill: PropTypes.string,
   stroke: PropTypes.string,
 });
-
 export default class PathGroup extends Component {
   static propTypes = {
     width: PropTypes.number,
@@ -19,8 +19,7 @@ export default class PathGroup extends Component {
         label: PropTypes.string,
         fill: PropTypes.string,
         stroke: PropTypes.string,
-      }),
-    ),
+      })),
     pathWidth: PropTypes.number,
     pathMargin: PropTypes.number,
     endAngle: PropTypes.number,
@@ -39,31 +38,58 @@ export default class PathGroup extends Component {
   componentDidUpdate(prevProps, prevState) {
     this.appendHover();
   }
-
   appendHover() {
     const el = select(this.container);
     const tool = select(el.node().querySelector('.toolTip'));
-    el.selectAll('path').on('mousemove', (d, i, p) => {
-      // fix this mess
-      const iter = i === 0 ? 1 : i;
-      const { fill, value } = this.props.values[iter - 1];
-      const pos = mouse(el.node());
+    const mw = 90;
+    const mh = 60;
+    el
+      .selectAll('path')
+      .on('mousemove', (d, i, p) => {
+        if (i === 0) {
+          return;
+        }
+        const pos = mouse(el.node());
+        let translateMouse;
+        if (pos[1] < this.props.height / 4) {
+          tool
+            .select('path')
+            .attr('d', tip.bottom(mw, mh));
+          translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] + (mh * 0.2)})`;
+        } else {
+          tool
+            .select('path')
+            .attr('d', tip.top(mw, mh));
+          translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] - (mh * 1.1)})`;
+        }
 
-      tool.transition().duration(0).attr('opacity', 1);
-      tool.select('path').attr('stroke', fill);
-      tool.select('text').text(`${Math.floor(value)}%`);
-      tool.attr('transform', `translate(${pos[0] - 26},${pos[1] - 64})`);
-    });
+        const { fill, value, label } = this.props.values[i - 1];
+
+
+        tool
+          .transition()
+          .duration(0)
+          .attr('opacity', 1);
+        tool
+          .select('path')
+          .attr('stroke', fill);
+        tool
+          .select('text')
+          .text(`${Math.floor(value)}%`)
+          .attr('dy', mh / 2)
+          .attr('dx', mw / 2);
+        tool
+          .attr('transform', translateMouse);
+      });
 
     el.on('mouseleave', () => {
       tool
         .transition()
         .duration(500)
-        .delay(500)
+        .delay(250)
         .attr('opacity', 0);
     });
   }
-
 
   render() {
     const chartMargin = this.props.chartMargin;
@@ -73,7 +99,7 @@ export default class PathGroup extends Component {
     const margin = this.props.pathMargin * fullRadius;
     return (
       <g
-        transform="translate(0,20)"
+        transform={`translate(0,${chartMargin / 2})`}
         ref={(c) => { this.container = c; }}
       >
         <ToolTip />

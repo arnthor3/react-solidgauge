@@ -34,8 +34,8 @@ class ChartSG extends Component {
       >
         <SolidGauge
           responsive
-          pathWidth={0.01}
-          pathMargin={0.15}
+          pathWidth={0.1}
+          pathMargin={0.009}
           endAngle={Math.PI * 1.5}
           values={values}
           ease="easeBounce"
@@ -45,7 +45,6 @@ class ChartSG extends Component {
           }}
           animateTime={1500}
           showTooltip
-          circleRadius={10}
         />
       </div>
     );
