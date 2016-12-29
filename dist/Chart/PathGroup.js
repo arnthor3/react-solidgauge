@@ -122,7 +122,7 @@ var PathGroup = function (_Component) {
                     stroke: d.stroke,
                     textAnchor: 'end',
                     dx: -15,
-                    dy: _this2.props.fontSize / 2 + width / 4 || 0
+                    dy: width / 2
                   },
                   d.label
                 )
@@ -157,7 +157,6 @@ PathGroup.propTypes = {
 };
 PathGroup.defaultProps = {
   ease: 'easeBounce',
-  chartMargin: 50,
   childRules: true,
   background: {
     fill: '#ddd',

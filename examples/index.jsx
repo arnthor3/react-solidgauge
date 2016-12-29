@@ -35,7 +35,7 @@ class ChartSG extends Component {
         <SolidGauge
           responsive
           pathWidth={0.1}
-          pathMargin={0.009}
+          pathMargin={0.05}
           endAngle={Math.PI * 1.5}
           values={values}
           ease="easeBounce"

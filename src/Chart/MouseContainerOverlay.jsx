@@ -44,18 +44,15 @@ export default class PathGroup extends Component {
     const mw = 90;
     const mh = 60;
     el
-      .selectAll('path')
+      .selectAll('path.mouse-path')
       .on('mousemove', (d, i, p) => {
-        if (i === 0) {
-          return;
-        }
         const pos = mouse(el.node());
         let translateMouse;
         if (pos[1] < this.props.height / 4) {
           tool
             .select('path')
             .attr('d', tip.bottom(mw, mh));
-          translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] + (mh * 0.2)})`;
+          translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] + (mh * 0.25)})`;
         } else {
           tool
             .select('path')
@@ -63,7 +60,7 @@ export default class PathGroup extends Component {
           translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] - (mh * 1.1)})`;
         }
 
-        const { fill, value, label } = this.props.values[i - 1];
+        const { fill, value, label } = this.props.values[i];
 
 
         tool
@@ -126,6 +123,7 @@ export default class PathGroup extends Component {
             >
               <g transform={`translate(${cX},${cY})`}>
                 <path
+                  className="mouse-path"
                   d={thisArc()}
                   opacity="0"
                   fill={d.fill}

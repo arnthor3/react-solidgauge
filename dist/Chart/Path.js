@@ -26,10 +26,6 @@ var _d3Interpolate = require('d3-interpolate');
 
 require('d3-transition');
 
-var _ReactIf = require('./ReactIf');
-
-var _ReactIf2 = _interopRequireDefault(_ReactIf);
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -53,7 +49,7 @@ var Path = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       if (this.props.animateTime) {
-        this.animate();
+        this.animate(300);
         return;
       }
       this.draw();
@@ -62,14 +58,14 @@ var Path = function (_Component) {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
       if (this.props.animateTime) {
-        this.animate();
+        this.animate(0);
         return;
       }
       this.draw();
     }
   }, {
     key: 'animate',
-    value: function animate() {
+    value: function animate(delay) {
       var _this2 = this;
 
       // limit the value tops 100 and min 0
@@ -83,7 +79,7 @@ var Path = function (_Component) {
 
       var easeFn = ease[this.props.ease] ? ease[this.props.ease] : ease.easeSinInOut;
 
-      path.datum([value]).transition().ease(easeFn).duration(this.props.animateTime).attrTween('d', function (_ref) {
+      path.datum([value]).transition().delay(delay).ease(easeFn).duration(this.props.animateTime).attrTween('d', function (_ref) {
         var _ref2 = _slicedToArray(_ref, 1),
             d = _ref2[0];
 

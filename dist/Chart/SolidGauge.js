@@ -24,6 +24,10 @@ var _MouseContainerOverlay = require('./MouseContainerOverlay');
 
 var _MouseContainerOverlay2 = _interopRequireDefault(_MouseContainerOverlay);
 
+var _Shadows = require('./Shadows');
+
+var _Shadows2 = _interopRequireDefault(_Shadows);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var dataShape = _react.PropTypes.shape({
@@ -50,7 +54,8 @@ var SolidGauge = function SolidGauge(props) {
         chartMargin: props.chartMargin,
         values: props.values,
         endAngle: props.endAngle,
-        fontSize: props.fontSize
+        fontSize: props.fontSize,
+        enterAnimation: props.enterAnimation
       },
       _react2.default.createElement(_Path2.default, {
         ease: props.ease,
@@ -61,10 +66,13 @@ var SolidGauge = function SolidGauge(props) {
       })
     ),
     props.showTooltip ? _react2.default.createElement(_MouseContainerOverlay2.default, {
+      chartMargin: props.chartMargin,
       endAngle: props.endAngle,
       pathWidth: props.pathWidth,
       pathMargin: props.pathMargin,
-      values: props.values
+      values: props.values,
+      mouseFill: props.mouseFill,
+      mouseStrokeWidth: props.mouseStrokeWidth
     }) : _react2.default.createElement('g', null)
   );
 };
@@ -82,6 +90,7 @@ var shape = _react.PropTypes.shape({
 });
 
 SolidGauge.propTypes = {
+  enterAnimation: _react.PropTypes.bool,
   responsive: _react.PropTypes.bool,
   width: _react.PropTypes.number,
   height: _react.PropTypes.number,
@@ -96,7 +105,13 @@ SolidGauge.propTypes = {
   animate: _react.PropTypes.bool,
   animateTime: _react.PropTypes.number,
   ease: _react.PropTypes.string,
-  circleRadius: _react.PropTypes.number
+  circleRadius: _react.PropTypes.number,
+  mouseFill: _react.PropTypes.string,
+  mouseStrokeWidth: _react.PropTypes.number
+};
+
+SolidGauge.defaultProps = {
+  chartMargin: 50
 };
 
 exports.default = SolidGauge;

@@ -3,6 +3,7 @@ import Chart from './Chart';
 import PathGroup from './PathGroup';
 import Path from './Path';
 import Mouse from './MouseContainerOverlay';
+import Shadows from './Shadows';
 
 const dataShape = PropTypes.shape({
   value: PropTypes.number,

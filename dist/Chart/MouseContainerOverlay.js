@@ -22,6 +22,12 @@ var _ToolTip = require('./ToolTip');
 
 var _ToolTip2 = _interopRequireDefault(_ToolTip);
 
+var _ToolTipSvg = require('./ToolTipSvg');
+
+var tip = _interopRequireWildcard(_ToolTipSvg);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61,23 +67,33 @@ var PathGroup = function (_Component) {
 
       var el = (0, _d3Selection.select)(this.container);
       var tool = (0, _d3Selection.select)(el.node().querySelector('.toolTip'));
-      el.selectAll('path').on('mousemove', function (d, i, p) {
-        // fix this mess
-        var iter = i === 0 ? 1 : i;
-        var _props$values = _this2.props.values[iter - 1],
-            fill = _props$values.fill,
-            value = _props$values.value;
-
+      var mw = 90;
+      var mh = 60;
+      el.selectAll('path.mouse-path').on('mousemove', function (d, i, p) {
         var pos = (0, _d3Selection.mouse)(el.node());
+        var translateMouse = void 0;
+        if (pos[1] < _this2.props.height / 4) {
+          tool.select('path').attr('d', tip.bottom(mw, mh));
+          translateMouse = 'translate(' + (pos[0] - mw / 2) + ',' + (pos[1] + mh * 0.25) + ')';
+        } else {
+          tool.select('path').attr('d', tip.top(mw, mh));
+          translateMouse = 'translate(' + (pos[0] - mw / 2) + ',' + (pos[1] - mh * 1.1) + ')';
+        }
+
+        var _props$values$i = _this2.props.values[i],
+            fill = _props$values$i.fill,
+            value = _props$values$i.value,
+            label = _props$values$i.label;
+
 
         tool.transition().duration(0).attr('opacity', 1);
         tool.select('path').attr('stroke', fill);
-        tool.select('text').text(Math.floor(value) + '%');
-        tool.attr('transform', 'translate(' + (pos[0] - 26) + ',' + (pos[1] - 64) + ')');
+        tool.select('text').text(Math.floor(value) + '%').attr('dy', mh / 2).attr('dx', mw / 2);
+        tool.attr('transform', translateMouse);
       });
 
       el.on('mouseleave', function () {
-        tool.transition().duration(500).delay(500).attr('opacity', 0);
+        tool.transition().duration(500).delay(250).attr('opacity', 0);
       });
     }
   }, {
@@ -93,7 +109,7 @@ var PathGroup = function (_Component) {
       return _react2.default.createElement(
         'g',
         {
-          transform: 'translate(0,20)',
+          transform: 'translate(0,' + chartMargin / 2 + ')',
           ref: function ref(c) {
             _this3.container = c;
           }
@@ -123,6 +139,7 @@ var PathGroup = function (_Component) {
               'g',
               { transform: 'translate(' + cX + ',' + cY + ')' },
               _react2.default.createElement('path', {
+                className: 'mouse-path',
                 d: thisArc(),
                 opacity: '0',
                 fill: d.fill,
