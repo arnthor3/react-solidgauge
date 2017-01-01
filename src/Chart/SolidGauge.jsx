@@ -7,6 +7,8 @@ import Shadows from './Shadows';
 import ReactIf from '../Helpers/ReactIf';
 import { dataShape, fillAndStroke } from '../Helpers/props';
 
+const isEmpty = obj => Object.keys(obj).length === 0 && obj.constructor === Object;
+
 const SolidGauge = props => (
   <Chart
     responsive={props.responsive}
@@ -38,15 +40,17 @@ const SolidGauge = props => (
           mouseStrokeWidth={props.mouseStrokeWidth}
         />
       </ReactIf>
-      <Shadows
-        id="shadows"
-        x={props.shadow.x}
-        y={props.shadow.y}
-        width={props.shadow.width}
-        height={props.shadow.height}
-        dx={props.shadow.dx}
-        dy={props.shadow.dy}
-      />
+      <ReactIf el={<g />} condition={!isEmpty(props.shadow)}>
+        <Shadows
+          id="shadows"
+          x={props.shadow.x}
+          y={props.shadow.y}
+          width={props.shadow.width}
+          height={props.shadow.height}
+          dx={props.shadow.dx}
+          dy={props.shadow.dy}
+        />
+      </ReactIf>
     </Group>
   </Chart>
 );

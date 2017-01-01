@@ -26,16 +26,33 @@ export default class PathGroup extends Component {
     const el = select(this.container);
     const elV = el.node().parentElement.querySelector('canvas');
     const tool = select(el.node().querySelector('.toolTip'));
-    const mw = 180;
+    let mw = 180;
     const mh = 60;
-    const top = tip.top(mw, mh);
-    const bottom = tip.bottom(mw, mh);
+    let top = tip.top(mw, mh);
+    let bottom = tip.bottom(mw, mh);
     el
       .selectAll(`path.${ch.MOUSE_PATH}`)
       .on('mousemove', (d, i, p) => {
         const pos = mouse(el.node());
         let translateMouse;
         const isBottom = (pos[1] < this.props.height / 4);
+        const { fill, value, label } = this.props.values[i];
+        const text = tool.select('text');
+        const textLength = text.node().getComputedTextLength() * 1.1;
+        text
+          .attr('dy', isBottom ? mh / 1.5 : mh / 2)
+          .attr('dx', 5);
+
+        text
+          .select('tspan.label')
+            .text(label);
+        text
+          .select('tspan.value')
+          .text(`${Math.floor(value)}%`);
+        mw = textLength;
+        top = tip.top(textLength, mh);
+        bottom = tip.bottom(textLength, mh);
+
         if (isBottom) {
           tool
             .select('path')
@@ -48,15 +65,12 @@ export default class PathGroup extends Component {
           translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] - (mh * 1.1)})`;
         }
 
-        const { fill, value, label } = this.props.values[i];
+
+
         tool
           .select('path')
           .attr('stroke', fill);
-        tool
-          .select('text')
-          .text(`${label}: ${Math.floor(value)}%`)
-          .attr('dy', isBottom ? mh / 1.5 : mh / 2)
-          .attr('dx', 5);
+
         tool
           .attr('transform', translateMouse);
         tool

@@ -18,6 +18,7 @@ export default class Path extends Component {
     circleRadius: PropTypes.number,
     fontSize: PropTypes.number,
     endAngle: PropTypes.number,
+    shadow: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -97,10 +98,11 @@ export default class Path extends Component {
         if (endCircle.empty()) {
           return t => thisArc.endAngle((inter(t)))();
         }
-
+        endCircle.attr('opacity', '1');
         return (t) => {
           thisArc.endAngle((inter(t)));
           const newArc = dh.doubleArc(thisArc);
+
           endC.attr('transform', `translate(${newArc.centroid()})`);
           return thisArc();
         };
@@ -153,7 +155,7 @@ export default class Path extends Component {
                   d={thisArc()}
                   fill={this.props.background.fill}
                   stroke={this.props.background.stroke}
-                  filter="url(#shadows)"
+                  filter={this.props.shadow ? 'url(#shadows)' : ''}
                 />
                 <g
                   transform={`translate(${thisArc().split('A')[0].split('M')[1]})`}
@@ -175,7 +177,7 @@ export default class Path extends Component {
                   stroke={d.stroke}
                 />
                 {this.props.circleRadius ?
-                  (<circle r={this.props.circleRadius} opacity="1" fill={d.fill} stroke={d.stroke} />)
+                  (<circle r={this.props.circleRadius} opacity="0" fill={d.fill} stroke={d.stroke} />)
                   : null}
               </g>
             </g>
