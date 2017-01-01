@@ -94,7 +94,7 @@ describe('<MouseOverlay />', () => {
     d3.mouse.restore();
   });
 
-  it('should render mouse top when mouse is bottom', () => {
+  it('should render mouse top when mouse is bottom', (done) => {
     const spy = sinon.stub(d3, 'mouse').returns([250, 250]);
     const wrapper = mount(
       <ToolTip
@@ -102,20 +102,22 @@ describe('<MouseOverlay />', () => {
         width={400}
         height={400}
         endAngle={Math.PI * 2}
-        arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(10).innerRadius(0)}
+        arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(100).innerRadius(0)}
       />,
     );
     const path = select(wrapper.find(`path.${ch.MOUSE_PATH}`).nodes[0]);
     const tool = select(wrapper.find('g.toolTip').node);
-
+    const text = tool.select('text');
     const eventIn = document.createEvent('SVGEvents');
     eventIn.initEvent('mousemove', true, true);
     path.node().dispatchEvent(eventIn);
     expect(spy.called).to.equal(true);
-    console.log(tool.select('path').attr('d'));
-    console.log(tool.select('path').attr('transform'));
-    expect(tool.select('path').attr('stroke')).to.equal('#881');
+    console.log(text.select('tspan').node().innerHTML);
+    // expect(text.attr('dx')).not.to.equal(null);
     d3.mouse.restore();
+    setTimeout(() => {
+      done();
+    }, 1000);
   });
 
 });

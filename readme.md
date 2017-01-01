@@ -13,7 +13,7 @@ npm install react-solidgauge
 
 ## SolidGauge Values shape
 
-The Chart needs values to be set like the example belowe.
+The Chart needs values to be set like the example below.
 ```js
 const values = [{
   value: 34,
@@ -22,7 +22,28 @@ const values = [{
   stroke: '#050570',
 }, .....]
 ```
-An array of shapes like the one described above.
+
+if the value is not between 0 and 100 then the value will be set to either, 0 if it's less than zero and 100 if it's more than 100
+
+## Shadow Value
+
+You can set a shadow effect on the background paths by setting the shadow prop on solid gauge. See the example below.
+```js
+shadow={{
+  y: '-10%',
+  x: '-10%',
+  height: '130%',
+  width: '130%',
+  stdDeviation: 2,
+  dx: 1,
+  dy: 2,
+}}
+```
+
+## Responsive
+
+If you set the responsive prop then the chart will calculate the width and height of the parent element and fill into that space.
+Also it will listen for screen resize and if it fires it will rerender. This is pretty conveniant when you are using a responsive grid system and dont know how big the chart will be.
 
 ### Props for SolidGauge
 
@@ -31,7 +52,7 @@ An array of shapes like the one described above.
 responsive|boolean|*true*| Rerenders the chart on screen resize and calculates width and height of parent and uses 100% dimensions available, perfect if you are using a responsive framework like bootstrap or google's mdl
 width|number|| sets the width of the component, if responsive is true then it will fill out into the parent container
 height|number|| sets the height of the component, the same applies here to the responsive prop.
-chartMargin|number|*null*| The Margin of the chart in pixels
+chartMargin|number|*null*| The Margin frame of the chart in pixels
 endAngle|number|Math.PI*1.5|EndAngle value
 values|Array of shape||This is the array that holds all the info, each shape has value, label, fill and stroke, that are applied to the legend and the path
 pathWidth|number|*0.1*|The path width, 0.1 by default means 10% of the chart radius
@@ -40,11 +61,11 @@ circleRadius|number|*null*|If this prop is set then the chart will add a circle 
 background|shape|*{fill:'#ccc',stroke:'#999'}*|The fill and stroke of the background arc
 fontSize|string|*null*|Sets the fontsize for lables
 animationTime|number|*2000*|The length of the animation in ms, if this number is set then the paths will animate
-ease|string|*easeBackIn*| The name of the easing function that's being used check out d3-easing project for a complete list of easing functions
+animationEase|string|*easeBounce*| The name of the easing function that's being used check out d3-easing project for a complete list of easing functions
 showTooltip|bool|*true*| If true then show the tooltip
 mouseFill|string|*rgba(254,254,254,.95)*| The background fill of the mouse
 mouseStrokeWidth|number|*4*|The Mouse stroke width - a.k.a the borders
-
+shadow|object||If this object is set then the background paths will have a shadow effect on them
 ### Using SolidGauge
 
 ```js
@@ -89,7 +110,7 @@ class Chart extends Component {
           pathWidth={0.1}
           pathMargin={0.1}
           values={this.state.values}
-          animate
+          animationTime={1500}
           showTooltip
           animateTime={2000}
           ease='easeLinear'

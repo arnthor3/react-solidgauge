@@ -39,13 +39,15 @@ export default class PathGroup extends Component {
         const { fill, value, label } = this.props.values[i];
         const text = tool.select('text');
         const textLength = text.node().getComputedTextLength() * 1.1;
+
         text
           .attr('dy', isBottom ? mh / 1.5 : mh / 2)
           .attr('dx', 5);
 
         text
           .select('tspan.label')
-            .text(label);
+          .text(label);
+
         text
           .select('tspan.value')
           .text(`${Math.floor(value)}%`);
@@ -64,13 +66,9 @@ export default class PathGroup extends Component {
             .attr('d', top);
           translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] - (mh * 1.1)})`;
         }
-
-
-
         tool
           .select('path')
           .attr('stroke', fill);
-
         tool
           .attr('transform', translateMouse);
         tool
