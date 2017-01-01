@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import SolidGauge, { Chart, PathGroup, Path, ToolTip } from '../src/index';
+import SolidGauge from '../src/index';
 
 const values = [
   { label: 'Email Campaign', value: 189, fill: '#881' },
@@ -23,6 +23,9 @@ describe('<SolidGauge />', () => {
         pathWidth={0.1}
         fontSize={20}
         showTooltip
+        shadow={{
+          x: '10%',
+        }}
         background={{
           fill: 'red',
           stroke: 'pink',

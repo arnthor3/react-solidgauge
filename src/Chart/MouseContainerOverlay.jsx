@@ -49,11 +49,6 @@ export default class PathGroup extends Component {
         }
 
         const { fill, value, label } = this.props.values[i];
-
-        tool
-          .transition()
-          .duration(0)
-          .attr('opacity', 1);
         tool
           .select('path')
           .attr('stroke', fill);
@@ -64,6 +59,10 @@ export default class PathGroup extends Component {
           .attr('dx', 5);
         tool
           .attr('transform', translateMouse);
+        tool
+          .transition()
+          .duration(0)
+          .attr('opacity', 1);
       });
 
     el.on('mouseleave', () => {
