@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { arc } from 'd3-shape';
 import { select, selectAll, mouse } from 'd3-selection';
-import cloneComponents from './cloneChildren';
+import cloneComponents from '../Helpers/cloneChildren';
 import ToolTip from './ToolTip';
 import { dataShape, fillAndStroke } from '../Helpers/props';
 import * as tip from '../Helpers/toolTipSvg';
