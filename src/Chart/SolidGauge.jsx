@@ -1,16 +1,11 @@
 import React, { PropTypes } from 'react';
 import Chart from './Chart';
+import Group from './Group';
 import PathGroup from './PathGroup';
-import Path from './Path';
 import Mouse from './MouseContainerOverlay';
 import Shadows from './Shadows';
-
-const dataShape = PropTypes.shape({
-  value: PropTypes.number,
-  label: PropTypes.string,
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
-});
+import ReactIf from '../Helpers/ReactIf';
+import { dataShape, fillAndStroke } from '../Helpers/props';
 
 const SolidGauge = props => (
   <Chart
@@ -18,73 +13,78 @@ const SolidGauge = props => (
     width={props.width}
     height={props.height}
   >
-    <PathGroup
-      background={props.background}
+    <Group
       pathWidth={props.pathWidth}
       pathMargin={props.pathMargin}
       chartMargin={props.chartMargin}
       values={props.values}
       endAngle={props.endAngle}
-      fontSize={props.fontSize}
-      enterAnimation={props.enterAnimation}
     >
-      <Path
-        ease={props.ease}
-        animate={props.animate}
-        animateTime={props.animateTime}
+      <PathGroup
+        background={props.background}
+        fontSize={props.fontSize}
+        enterAnimation={props.enterAnimation}
+        animationEase={props.animationEase}
+        animationTime={props.animationTime}
         circleRadius={props.circleRadius}
         endAngle={props.endAngle}
       />
-    </PathGroup>
-    {props.showTooltip ? (
-      <Mouse
-        chartMargin={props.chartMargin}
-        endAngle={props.endAngle}
-        pathWidth={props.pathWidth}
-        pathMargin={props.pathMargin}
-        values={props.values}
-        mouseFill={props.mouseFill}
-        mouseStrokeWidth={props.mouseStrokeWidth}
-      />) : <g />}
+      <ReactIf
+        el={<g />}
+        condition={props.showTooltip}
+      >
+        <Mouse
+          mouseFill={props.mouseFill}
+          mouseStrokeWidth={props.mouseStrokeWidth}
+        />
+      </ReactIf>
+      <Shadows
+        id="shadows"
+        x={props.shadow.x}
+        y={props.shadow.y}
+        width={props.shadow.width}
+        height={props.shadow.height}
+        dx={props.shadow.dx}
+        dy={props.shadow.dy}
+      />
+    </Group>
   </Chart>
 );
-
-const fillStroke = PropTypes.shape({
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
-});
-
-const shape = PropTypes.shape({
-  value: PropTypes.number,
-  label: PropTypes.string,
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
-});
-
 
 SolidGauge.propTypes = {
   enterAnimation: PropTypes.bool,
   responsive: PropTypes.bool,
   width: PropTypes.number,
   height: PropTypes.number,
-  values: PropTypes.arrayOf(shape),
+  values: dataShape,
   pathWidth: PropTypes.number,
   pathMargin: PropTypes.number,
   endAngle: PropTypes.number,
-  background: fillStroke,
+  background: fillAndStroke,
   fontSize: PropTypes.number,
   chartMargin: PropTypes.number,
   showTooltip: PropTypes.bool,
-  animate: PropTypes.bool,
-  animateTime: PropTypes.number,
-  ease: PropTypes.string,
+  animationTime: PropTypes.number,
+  animationEase: PropTypes.string,
   circleRadius: PropTypes.number,
   mouseFill: PropTypes.string,
   mouseStrokeWidth: PropTypes.number,
+  shadow: PropTypes.shape({
+    id: PropTypes.string,
+    y: PropTypes.string,
+    x: PropTypes.string,
+    height: PropTypes.string,
+    width: PropTypes.string,
+    stdDeviation: PropTypes.number,
+    dx: PropTypes.number,
+    dy: PropTypes.number,
+  }),
 };
 
 SolidGauge.defaultProps = {
   chartMargin: 50,
+  shadow: {},
+  background: {},
 };
 
 export default SolidGauge;

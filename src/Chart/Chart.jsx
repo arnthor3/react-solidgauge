@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import throttle from 'lodash.throttle';
-import ReactIf from './ReactIf';
-import cloneComponents from './cloneChildren';
+import ReactIf from '../Helpers/ReactIf';
+import cloneComponents from '../Helpers/cloneChildren';
 
 export default class Chart extends Component {
   static propTypes = {

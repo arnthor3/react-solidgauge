@@ -14,15 +14,19 @@ const values = [
 ];
 
 describe('<PathGroup />', () => {
-  it('should render', () => {
+  it('should render', (done) => {
     const wrapper = mount(
       <PathGroup
         values={values}
         width={400}
         height={400}
+        animationEase="I do not exist"
+        animationTime={500}
         endAngle={Math.PI * 2}
       />,
     );
-
+    setTimeout(() => {
+      done();
+    }, 1000);
   });
 });

@@ -5,8 +5,8 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { arc } from 'd3-shape';
 import { select } from 'd3-selection';
-import { ToolTip } from '../src/index';
-
+import ToolTip from '../src/Chart/MouseContainerOverlay';
+import * as ch from '../src/Helpers/constants';
 const values = [
   { label: 'Email Campaign', value: 189, fill: '#881' },
   { label: 'Google AdWords', value: 65, fill: '#188' },
@@ -39,10 +39,11 @@ describe('<MouseOverlay />', () => {
         arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(10).innerRadius(0)}
       />,
     );
-    const path = select(wrapper.find('path.mouse-path').nodes[0]);
+    const path = select(wrapper.find(`path.${ch.MOUSE_PATH}`).nodes[0]);
     const event = document.createEvent('SVGEvents');
     event.initEvent('mousemove', true, true);
     const tool = select(wrapper.find('g.toolTip').node);
+    done();
     path.node().dispatchEvent(event);
     setTimeout(() => {
       expect(tool.attr('opacity')).not.to.equal('0');
@@ -59,13 +60,13 @@ describe('<MouseOverlay />', () => {
         arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(10).innerRadius(0)}
       />,
     );
-    const path = select(wrapper.find('path').nodes[0]);
+    const path = select(wrapper.find(`path.${ch.MOUSE_PATH}`).nodes[0]);
     const tool = select(wrapper.find('g.toolTip').node);
     tool.attr('opacity', '1');
     const eventOut = document.createEvent('SVGEvents');
     eventOut.initEvent('mouseleave', true, true);
     path.node().dispatchEvent(eventOut);
-
+    done();
     setTimeout(() => {
       expect(tool.attr('opacity')).not.to.equal('1');
       done();
@@ -83,7 +84,7 @@ describe('<MouseOverlay />', () => {
         arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(10).innerRadius(0)}
       />,
     );
-    const path = select(wrapper.find('path.mouse-path').nodes[0]);
+    const path = select(wrapper.find(`path.${ch.MOUSE_PATH}`).nodes[0]);
     const tool = select(wrapper.find('g.toolTip').node);
     const eventIn = document.createEvent('SVGEvents');
     eventIn.initEvent('mousemove', true, true);

@@ -1,8 +1,8 @@
 import Chart from './Chart/Chart';
+import Group from './Chart/Group';
 import PathGroup from './Chart/PathGroup';
-import Path from './Chart/Path';
 import SolidGauge from './Chart/SolidGauge';
-import ToolTip from './Chart/MouseContainerOverlay';
+import Mouse from './Chart/MouseContainerOverlay';
 
-export { Chart, PathGroup, Path, ToolTip };
+export { Chart, Group, PathGroup, Mouse };
 export default SolidGauge;

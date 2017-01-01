@@ -1,12 +1,15 @@
 import React, { Children, PropTypes } from 'react';
+import cloneElement from './cloneChildren';
 /*
   A template function that renders children if the condition is true
  */
-const ReactIf = ({ children, condition, el }) => {
-  if (!condition) {
+const ReactIf = (props) => {
+  if (!props.condition) {
     return null;
   }
-  return React.cloneElement(el, { children });
+  const { children, el, condition, ...nochildren } = props;
+
+  return React.cloneElement(props.el, { children: cloneElement(children, nochildren) });
 };
 
 ReactIf.defaultProps = {

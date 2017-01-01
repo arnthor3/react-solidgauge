@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import * as tip from '../src/Chart/ToolTipSvg';
+import * as tip from '../src/Helpers/toolTipSvg';
 
 describe('ToolTipSvg', () => {
   it('should return a string', () => {

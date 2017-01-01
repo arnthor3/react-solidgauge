@@ -39,4 +39,15 @@ shadows.propTypes = {
   dy: PropTypes.number,
 };
 
+shadows.defaultProps = {
+  id: 'shadow',
+  y: '-10%',
+  x: '-10%',
+  height: '130%',
+  width: '130%',
+  stdDeviation: 2,
+  dx: 2,
+  dy: 2,
+};
+
 export default shadows;

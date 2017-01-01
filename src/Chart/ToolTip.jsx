@@ -9,7 +9,11 @@ const ToolTip = ({ mouseFill, mouseStrokeWidth }) => (
       fill={mouseFill}
       strokeWidth={mouseStrokeWidth}
     />
-    <text textAnchor="middle" />
+    <text>
+      <tspan className="label" />
+      <tspan className="value" />
+      <tspan className="percentage" />
+    </text>
   </g>
 );
 

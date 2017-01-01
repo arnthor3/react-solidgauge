@@ -1,115 +1,182 @@
 import React, { Component, PropTypes } from 'react';
 import { arc } from 'd3-shape';
-import { select, selectAll, mouse } from 'd3-selection';
+import * as ease from 'd3-ease';
+import { select, selectAll } from 'd3-selection';
+
+import { interpolate } from 'd3-interpolate';
 import 'd3-transition';
-import cloneComponents from './cloneChildren';
+import * as ch from '../Helpers/constants';
+import * as dh from '../Helpers/dimensions';
+import { dataShape, fillAndStroke } from '../Helpers/props';
 
-
-const fillStroke = PropTypes.shape({
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
-});
-
-const shape = PropTypes.shape({
-  value: PropTypes.number,
-  label: PropTypes.string,
-  fill: PropTypes.string,
-  stroke: PropTypes.string,
-});
-
-export default class PathGroup extends Component {
+export default class Path extends Component {
   static propTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number,
-    values: PropTypes.arrayOf(shape),
-    pathWidth: PropTypes.number,
-    pathMargin: PropTypes.number,
-    iter: PropTypes.number,
-    endAngle: PropTypes.number,
-    cornerRadius: PropTypes.number,
-    background: fillStroke,
+    animationTime: PropTypes.number,
+    animationEase: PropTypes.string,
+    values: dataShape,
+    background: fillAndStroke,
+    circleRadius: PropTypes.number,
     fontSize: PropTypes.number,
-    margin: PropTypes.number,
-    chartMargin: PropTypes.number,
-    data: shape,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node,
-    ]),
-    childRules: PropTypes.bool,
+    endAngle: PropTypes.number,
   }
 
   static defaultProps = {
-    ease: 'easeBounce',
-    childRules: true,
-    background: {
-      fill: '#ddd',
-      stroke: '#aaa',
-    },
-  };
+    background: {},
+  }
+
+
+  componentWillMount() {
+    if (this.props.values === undefined || this.props.values.length === 0) {
+      throw new Error(ch.NO_DATA);
+    }
+  }
+
+
+  componentDidMount() {
+    this.renderChart(750);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.renderChart();
+  }
+
+  getAnimationVariables() {
+    let aTime = this.props.animationTime;
+    let aEase = ease[this.props.animationEase];
+
+    if (aTime === undefined) {
+      aTime = ch.animationTime;
+    }
+
+    if (typeof aEase !== 'function') {
+      aEase = ease[ch.animationEase];
+    }
+
+    return {
+      aTime,
+      aEase,
+    };
+  }
+
+  animate(enterDelay = 0) {
+    const paths = select(this.container).selectAll(`path.${ch.VALUE_PATH}`);
+    const endCircle = select(this.container).selectAll('circle');
+    const scale = dh.getValueScale(this.props);
+    const dim = dh.getDimensions(this.props);
+    const { aTime, aEase } = this.getAnimationVariables();
+    paths
+      .transition()
+      .duration(aTime)
+      .delay(enterDelay)
+      .ease(aEase)
+      .attrTween('d', (d, i, path) => {
+        // Select the endcircle we will be animating
+        const endC = select(endCircle.nodes()[i]);
+
+        // select the path that we are working with
+        const p = select(path[i]);
+
+        // read the old data value from the path
+        const old = p.node().old || 0;
+
+        // fix value min, max 0, 100
+        let value = this.props.values[i].value;
+        value = value > 100 ? 100 : value;
+        value = value < 0 ? 0 : value;
+
+        // get the arc we are working with
+        const { thisArc } = dh.getRadius(dim, i);
+
+        // create the interpolation between the old value and to the new value
+        const inter = interpolate(scale(old), scale(value));
+
+        // store the old value on the node
+        p.node().old = value;
+
+        // if the endcircle is empty then just animate the path
+        if (endCircle.empty()) {
+          return t => thisArc.endAngle((inter(t)))();
+        }
+
+        return (t) => {
+          thisArc.endAngle((inter(t)));
+          const newArc = dh.doubleArc(thisArc);
+          endC.attr('transform', `translate(${newArc.centroid()})`);
+          return thisArc();
+        };
+      });
+  }
+
+  draw() {
+    const paths = select(this.container).selectAll(`path.${ch.VALUE_PATH}`);
+    const endCircle = select(this.container).selectAll('circle');
+    const scale = dh.getValueScale(this.props);
+    const dim = dh.getDimensions(this.props);
+
+    paths
+      .attr('d', (d, i) => {
+        const endC = select(endCircle.nodes()[i]);
+        let value = this.props.values[i].value;
+        value = value > 100 ? 100 : value;
+        value = value < 0 ? 0 : value;
+        const { thisArc } = dh.getRadius(dim, i);
+        thisArc.endAngle(scale(value));
+        const newArc = dh.doubleArc(thisArc);
+        endC.attr('transform', `translate(${newArc.centroid()})`);
+        return thisArc();
+      });
+  }
+
+  renderChart(enterDelay) {
+    const shouldAnimate = (
+      this.props.animationTime || this.props.animationEase
+    );
+    if (shouldAnimate) {
+      this.animate(enterDelay);
+      return;
+    }
+    this.draw();
+  }
 
   render() {
-    const chartMargin = this.props.chartMargin;
-    const height = this.props.height - chartMargin;
-    const fullRadius = Math.min((this.props.height / 2) - (chartMargin / 2), this.props.width / 2);
-    const width = this.props.pathWidth * fullRadius;
-    const margin = this.props.pathMargin * fullRadius;
+    const dim = dh.getDimensions(this.props);
     return (
       <g
-        transform={`translate(0,${chartMargin / 2})`}
         ref={(c) => { this.container = c; }}
       >
         {this.props.values.map((d, i) => {
-          const marginAndWidth = width + margin;
-
-          const cX = (this.props.width / 2);
-          const cY = (height / 2) - (i * marginAndWidth);
-          const radius = Math.min(cX, cY);
-          const outer = radius;
-          const thisArc = arc()
-                            .outerRadius(outer)
-                            .innerRadius(outer - width)
-                            .startAngle(0)
-                            .endAngle(this.props.endAngle);
-
-          const { children, ...noChildren } = this.props;
-
-          // Copy the props and the state to pass it down to the children
-          const props = Object.assign({}, noChildren, {
-            arc: thisArc,
-            data: d,
-            pathWidth: width,
-          });
-
-          // Clone the children and pass in the props and state
-          const cloneChildrenWithProps = cloneComponents(
-            this.props.children, props, this.childRules);
-
+          const { cX, cY, outer, thisArc } = dh.getRadius(dim, i, this.props.endAngle);
           return (
-            <g
-              key={i}
-              transform={`translate(0,${i * marginAndWidth})`}
-            >
+            <g key={i} transform={`translate(0,${i * dim.marginAndWidth})`}>
               <g transform={`translate(${cX},${cY})`}>
                 <path
                   d={thisArc()}
                   fill={this.props.background.fill}
                   stroke={this.props.background.stroke}
+                  filter="url(#shadows)"
                 />
-                <g transform={`translate(${thisArc().split('A')[0].split('M')[1]})`} >
+                <g
+                  transform={`translate(${thisArc().split('A')[0].split('M')[1]})`}
+                >
                   <text
-                    style={{
-                      pointerEvent: 'none',
-                    }}
+                    style={{ pointerEvent: 'none' }}
                     fontSize={this.props.fontSize}
                     fill={d.fill}
                     stroke={d.stroke}
                     textAnchor="end"
                     dx={-15}
-                    dy={width / 2}
-                  >{d.label}</text>
+                    dy={dim.pathWidth / 2}
+                  >{d.label}
+                  </text>
                 </g>
-                {cloneChildrenWithProps}
+                <path
+                  className={ch.VALUE_PATH}
+                  fill={d.fill}
+                  stroke={d.stroke}
+                />
+                {this.props.circleRadius ?
+                  (<circle r={this.props.circleRadius} opacity="1" fill={d.fill} stroke={d.stroke} />)
+                  : null}
               </g>
             </g>
           );
@@ -118,3 +185,4 @@ export default class PathGroup extends Component {
     );
   }
 }
+
