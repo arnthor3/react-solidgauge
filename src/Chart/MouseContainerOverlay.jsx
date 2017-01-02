@@ -37,24 +37,11 @@ export default class PathGroup extends Component {
         let translateMouse;
         const isBottom = (pos[1] < this.props.height / 4);
         const { fill, value, label } = this.props.values[i];
-        const text = tool.select('text');
-        const textLength = text.node().getComputedTextLength() * 1.1;
-
-        text
-          .attr('dy', isBottom ? mh / 1.5 : mh / 2)
-          .attr('dx', 5);
-
-        text
-          .select('tspan.label')
-          .text(label);
-
-        text
-          .select('tspan.value')
-          .text(`${Math.floor(value)}%`);
+        const mouseText = tool.select('text');
+        const textLength = dh.getTextLength(mouseText.node());
         mw = textLength;
         top = tip.top(textLength, mh);
         bottom = tip.bottom(textLength, mh);
-
         if (isBottom) {
           tool
             .select('path')
@@ -66,6 +53,17 @@ export default class PathGroup extends Component {
             .attr('d', top);
           translateMouse = `translate(${pos[0] - (mw / 2)},${pos[1] - (mh * 1.1)})`;
         }
+        mouseText
+          .attr('dy', isBottom ? mh / 1.5 : mh / 2)
+          .attr('dx', 5);
+
+        mouseText
+          .select('tspan.label')
+          .text(label);
+
+        mouseText
+          .select('tspan.value')
+          .text(`${Math.floor(value)}%`);
         tool
           .select('path')
           .attr('stroke', fill);
@@ -94,16 +92,17 @@ export default class PathGroup extends Component {
       >
         <ToolTip />
         {this.props.values.map((d, i) => {
-          const { cX, cY, outer } = dh.getRadius(dim, i);
+          const { cX, cY, r } = dh.getRadius(dim, i);
           const thisArc = (
             arc()
-              .outerRadius(outer)
-              .innerRadius(outer - dim.marginAndWidth)
+              .outerRadius(r)
+              .innerRadius(r - dim.marginAndWidth)
               .startAngle(0)
               .endAngle(this.props.endAngle)
           );
+          const offset = i * dim.marginAndWidth;
           return (
-            <g key={i} transform={`translate(0,${i * dim.marginAndWidth})`}>
+            <g key={i} transform={`translate(${offset},${offset})`}>
               <g transform={`translate(${cX},${cY})`}>
                 <path
                   className={ch.MOUSE_PATH}

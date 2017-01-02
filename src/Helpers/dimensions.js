@@ -19,14 +19,13 @@ export const getDimensions =
 
 export const getRadius =
   ({ groupWidth, groupHeight, pathWidth, pathMargin, marginAndWidth }, iter, endAngle) => {
-    const cX = groupWidth / 2;
+    const cX = (groupWidth / 2) - (iter * marginAndWidth);
     const cY = (groupHeight / 2) - (iter * marginAndWidth);
-    const outer = Math.min(cX, cY);
-
+    const r = Math.min(cX, cY);
     const thisArc = (
       arc()
-        .outerRadius(outer)
-        .innerRadius(outer - pathWidth)
+        .outerRadius(r)
+        .innerRadius(r - pathWidth)
         .startAngle(0)
         .endAngle(endAngle)
     );
@@ -35,7 +34,7 @@ export const getRadius =
       thisArc,
       cX,
       cY,
-      outer,
+      r,
     };
   };
 
@@ -49,3 +48,6 @@ export const doubleArc = thisArc => (
     .startAngle(thisArc.startAngle()())
     .endAngle(thisArc.endAngle()() * 2)
 );
+
+export const getTextLength = node => node.getComputedTextLength() * 1.1;
+

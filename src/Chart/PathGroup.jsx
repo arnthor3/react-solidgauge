@@ -147,9 +147,10 @@ export default class Path extends Component {
         ref={(c) => { this.container = c; }}
       >
         {this.props.values.map((d, i) => {
-          const { cX, cY, outer, thisArc } = dh.getRadius(dim, i, this.props.endAngle);
+          const { r, cX, cY, outer, thisArc } = dh.getRadius(dim, i, this.props.endAngle);
+          const offset = i * dim.marginAndWidth;
           return (
-            <g key={i} transform={`translate(0,${i * dim.marginAndWidth})`}>
+            <g key={i} transform={`translate(${offset},${offset})`}>
               <g transform={`translate(${cX},${cY})`}>
                 <path
                   d={thisArc()}

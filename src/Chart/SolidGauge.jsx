@@ -30,6 +30,7 @@ const SolidGauge = props => (
         animationTime={props.animationTime}
         circleRadius={props.circleRadius}
         endAngle={props.endAngle}
+        shadow={!isEmpty(props.shadow)}
       />
       <ReactIf
         el={<g />}

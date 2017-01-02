@@ -7,6 +7,7 @@ import { arc } from 'd3-shape';
 import { select } from 'd3-selection';
 import ToolTip from '../src/Chart/MouseContainerOverlay';
 import * as ch from '../src/Helpers/constants';
+import * as dh from '../src/Helpers/dimensions';
 
 const values = [
   { label: 'Email Campaign', value: 189, fill: '#881' },
@@ -95,12 +96,13 @@ describe('<MouseOverlay />', () => {
   });
 
   it('should render mouse top when mouse is bottom', (done) => {
-    const spy = sinon.stub(d3, 'mouse').returns([250, 250]);
+    const spy = sinon.stub(d3, 'mouse').returns([10, 10]);
+    const stub = sinon.stub(dh, 'getTextLength').returns(110);
     const wrapper = mount(
       <ToolTip
         values={values}
-        width={400}
-        height={400}
+        width={800}
+        height={800}
         endAngle={Math.PI * 2}
         arc={arc().endAngle(Math.PI).startAngle(0).outerRadius(100).innerRadius(0)}
       />,
@@ -112,7 +114,6 @@ describe('<MouseOverlay />', () => {
     eventIn.initEvent('mousemove', true, true);
     path.node().dispatchEvent(eventIn);
     expect(spy.called).to.equal(true);
-    console.log(text.select('tspan').node().innerHTML);
     // expect(text.attr('dx')).not.to.equal(null);
     d3.mouse.restore();
     setTimeout(() => {

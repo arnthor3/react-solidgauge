@@ -49,22 +49,22 @@ class ChartSG extends Component {
       >
         <SolidGauge
           responsive
-          pathWidth={0.1}
+          pathWidth={0.11}
           pathMargin={0.025}
           endAngle={Math.PI * 1.5}
           values={values[this.state.iter]}
           animationTime={1500}
           background={{
-            fill: '#ccc',
-            stroke: '#999',
+            fill: '#ddd',
+            stroke: '#bbb',
           }}
           fontSize={18}
           showTooltip
           shadow={{
             width: '120%',
             height: '130%',
-            dx: 2,
-            dy: 2,
+            dx: 1,
+            dy: 3,
             stdDeviation: 2,
           }}
         />
