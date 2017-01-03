@@ -1,8 +1,8 @@
 {
   "name": "react-solidgauge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Small React-D3 solid gauge chart inspired by amcharts",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/arnthor3/react-solidgauge#readme",
   "devDependencies": {
+    "babel-core": "^6.20.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
     "babel-preset-es2015": "^6.18.0",
@@ -48,7 +49,6 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "babel-core": "^6.20.0",
     "d3-ease": "^1.0.2",
     "d3-interpolate": "^1.1.2",
     "d3-scale": "^1.0.4",
