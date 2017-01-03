@@ -11,6 +11,9 @@ This chart is supposed to handle situations where you need to compare level of c
 npm install react-solidgauge
 ```
 
+### Examples
+I will do a proper example page when I have finished building all the charts that I need, till then [check out these examples](https://arnthor3.github.io/arnthor3/)
+
 ## SolidGauge Values shape
 
 The Chart needs values to be set like the example below.
