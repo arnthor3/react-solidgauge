@@ -28,6 +28,7 @@ export const getRadius =
         .innerRadius(r - pathWidth)
         .startAngle(0)
         .endAngle(endAngle)
+
     );
 
     return {

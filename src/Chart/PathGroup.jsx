@@ -174,7 +174,7 @@ export default class Path extends Component {
                 </g>
                 <path
                   className={ch.VALUE_PATH}
-                  fill={d.fill}
+                  fill={`url(#grad${i})`}
                   stroke={d.stroke}
                 />
                 {this.props.circleRadius ?

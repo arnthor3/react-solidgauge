@@ -49,6 +49,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "d3-color": "^1.0.2",
     "d3-ease": "^1.0.2",
     "d3-interpolate": "^1.1.2",
     "d3-scale": "^1.0.4",

@@ -24,7 +24,6 @@ export default class PathGroup extends Component {
   }
   appendHover() {
     const el = select(this.container);
-    const elV = el.node().parentElement.querySelector('canvas');
     const tool = select(el.node().querySelector('.toolTip'));
     let mw = 180;
     const mh = 60;
@@ -71,7 +70,7 @@ export default class PathGroup extends Component {
           .attr('transform', translateMouse);
         tool
           .transition()
-          .duration(0)
+          .duration(50)
           .attr('opacity', 1);
       });
 
