@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import Chart from './Chart';
+import Chart from 'react-offcharts-core/Components/Chart';
+import ReactIf from 'react-offcharts-core/Components/ReactIf';
+import Shadows from 'react-offcharts-core/Components/Defs/Shadow';
+import guid from 'react-offcharts-core/Utils/guid';
 import Group from './Group';
 import PathGroup from './PathGroup';
 import Mouse from './MouseContainerOverlay';
-import Shadows from './Shadows';
-import ReactIf from '../Helpers/ReactIf';
 import { dataShape, fillAndStroke } from '../Helpers/props';
 
 const isEmpty = obj => Object.keys(obj).length === 0 && obj.constructor === Object;
@@ -34,6 +35,7 @@ const SolidGauge = props => (
       />
       <ReactIf
         el={<g />}
+        copy
         condition={props.showTooltip}
       >
         <Mouse

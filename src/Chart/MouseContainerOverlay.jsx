@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { arc } from 'd3-shape';
 import { select, selectAll, mouse } from 'd3-selection';
-import cloneComponents from '../Helpers/cloneChildren';
+import cloneChildren from 'react-offcharts-core/Utils/cloneChildren';
 import ToolTip from './ToolTip';
 import { dataShape, fillAndStroke } from '../Helpers/props';
 import * as tip from '../Helpers/toolTipSvg';
@@ -85,6 +85,7 @@ export default class PathGroup extends Component {
 
   render() {
     const dim = dh.getDimensions(this.props);
+    console.log(this.props);
     return (
       <g
         ref={(c) => { this.container = c; }}

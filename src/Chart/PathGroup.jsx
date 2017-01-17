@@ -141,6 +141,7 @@ export default class Path extends Component {
   }
 
   render() {
+    console.log(this.props);
     const dim = dh.getDimensions(this.props);
     return (
       <g
@@ -174,7 +175,7 @@ export default class Path extends Component {
                 </g>
                 <path
                   className={ch.VALUE_PATH}
-                  fill={`url(#grad${i})`}
+                  fill={d.fill}
                   stroke={d.stroke}
                 />
                 {this.props.circleRadius ?
