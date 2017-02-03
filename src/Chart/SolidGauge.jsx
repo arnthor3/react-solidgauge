@@ -52,6 +52,7 @@ const SolidGauge = props => (
           height={props.shadow.height}
           dx={props.shadow.dx}
           dy={props.shadow.dy}
+          stdDeviation={props.shadow.stdDeviation}
         />
       </ReactIf>
     </Group>

@@ -1,9 +1,6 @@
 const path =  require('path');
 const webpack = require('webpack');
 
-const env = process.env.WEBPACK_ENV;
-const BUILD = 'build';
-
 module.exports = {
   devtool: 'eval-source-map',
   entry: './examples/index.jsx',
