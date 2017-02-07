@@ -1,6 +1,6 @@
 {
   "name": "react-solidgauge",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A Small React-D3 solid gauge chart inspired by amcharts",
   "main": "dist/index.js",
   "scripts": {
