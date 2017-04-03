@@ -13,15 +13,30 @@ export default class PathGroup extends Component {
     height: PropTypes.number,
     values: dataShape,
     endAngle: PropTypes.number,
+    selectable: PropTypes.bool,
+    onSelect: PropTypes.func,
   }
 
   componentDidMount() {
     this.appendHover();
+    if (this.props.selectable) {
+      this.appendSelect();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     this.appendHover();
   }
+
+  appendSelect() {
+    const el = select(this.container);
+    el
+      .selectAll(`path.${ch.MOUSE_PATH}`)
+      .on('click', (d, i, p) => {
+        console.log(p[i]);
+      });
+  }
+
   appendHover() {
     const el = select(this.container);
     const tool = select(el.node().querySelector('.toolTip'));
@@ -37,6 +52,13 @@ export default class PathGroup extends Component {
         const isBottom = (pos[1] < this.props.height / 4);
         const { fill, value, label } = this.props.values[i];
         const mouseText = tool.select('text');
+        mouseText
+          .select('tspan.label')
+          .text(label);
+
+        mouseText
+          .select('tspan.value')
+          .text(`${Math.floor(value)}%`);
         const textLength = dh.getTextLength(mouseText.node());
         mw = textLength;
         top = tip.top(textLength, mh);
@@ -56,13 +78,7 @@ export default class PathGroup extends Component {
           .attr('dy', isBottom ? mh / 1.5 : mh / 2)
           .attr('dx', 5);
 
-        mouseText
-          .select('tspan.label')
-          .text(label);
 
-        mouseText
-          .select('tspan.value')
-          .text(`${Math.floor(value)}%`);
         tool
           .select('path')
           .attr('stroke', fill);

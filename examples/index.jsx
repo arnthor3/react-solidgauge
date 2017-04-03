@@ -45,10 +45,10 @@ class ChartSG extends Component {
           width: '50%',
           height: '500px',
         }}
-        onClick={this.onClick}
       >
         <SolidGauge
           responsive
+          selectable
           pathWidth={0.10}
           pathMargin={0.05}
           endAngle={Math.PI * 1.5}

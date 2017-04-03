@@ -41,6 +41,7 @@ const SolidGauge = props => (
         <Mouse
           mouseFill={props.mouseFill}
           mouseStrokeWidth={props.mouseStrokeWidth}
+          selectable={props.selectable}
         />
       </ReactIf>
       <ReactIf el={<g />} condition={!isEmpty(props.shadow)}>
@@ -77,6 +78,7 @@ SolidGauge.propTypes = {
   circleRadius: PropTypes.number,
   mouseFill: PropTypes.string,
   mouseStrokeWidth: PropTypes.number,
+  selectable: PropTypes.bool,
   shadow: PropTypes.shape({
     id: PropTypes.string,
     y: PropTypes.string,

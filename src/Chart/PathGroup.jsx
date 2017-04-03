@@ -98,14 +98,20 @@ export default class Path extends Component {
         if (endCircle.empty()) {
           return t => thisArc.endAngle((inter(t)))();
         }
+
         endCircle.attr('opacity', '1');
+
         return (t) => {
           thisArc.endAngle((inter(t)));
           const newArc = dh.doubleArc(thisArc);
-
           endC.attr('transform', `translate(${newArc.centroid()})`);
           return thisArc();
         };
+      })
+      .on('end', (d, i) => {
+        if (this.props.selectable && i === this.props.values.length - 1) {
+          this.appendSelectOnPaths();
+        }
       });
   }
 
