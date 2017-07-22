@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Chart from 'react-offcharts-core/Components/Chart';
 import ReactIf from 'react-offcharts-core/Components/ReactIf';
 import Shadows from 'react-offcharts-core/Components/Defs/Shadow';

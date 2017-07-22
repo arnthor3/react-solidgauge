@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { arc } from 'd3-shape';
 import { select, selectAll, mouse } from 'd3-selection';
 import cloneChildren from 'react-offcharts-core/Utils/cloneChildren';
@@ -17,6 +18,10 @@ export default class PathGroup extends Component {
     onSelect: PropTypes.func,
   }
 
+  static defaultProps = {
+    onSelect: () => {},
+  }
+
   componentDidMount() {
     this.appendHover();
     if (this.props.selectable) {
@@ -33,7 +38,7 @@ export default class PathGroup extends Component {
     el
       .selectAll(`path.${ch.MOUSE_PATH}`)
       .on('click', (d, i, p) => {
-        console.log(p[i]);
+        this.props.onSelect(p[i]);
       });
   }
 
@@ -101,7 +106,6 @@ export default class PathGroup extends Component {
 
   render() {
     const dim = dh.getDimensions(this.props);
-    console.log(this.props);
     return (
       <g
         ref={(c) => { this.container = c; }}

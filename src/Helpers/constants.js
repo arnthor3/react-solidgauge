@@ -1,4 +1,4 @@
-const R = 'react-funnelchart';
+const R = 'react-solidgauge';
 
 export const NO_DATA = `React-Solidgauge needs the values prop to be set to render,
 please set the property and try again,

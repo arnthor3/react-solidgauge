@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { arc } from 'd3-shape';
 import * as ease from 'd3-ease';
 import { select, selectAll } from 'd3-selection';
@@ -19,6 +20,7 @@ export default class Path extends Component {
     fontSize: PropTypes.number,
     endAngle: PropTypes.number,
     shadow: PropTypes.bool,
+    selectable: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -147,7 +149,6 @@ export default class Path extends Component {
   }
 
   render() {
-    console.log(this.props);
     const dim = dh.getDimensions(this.props);
     return (
       <g

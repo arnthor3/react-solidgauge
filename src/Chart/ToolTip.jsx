@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const left = 'M8 24 L0 32 L8 42 L8 64 L64 64 L64 0 L8 0 Z';
 

@@ -31,7 +31,17 @@ class ChartSG extends Component {
   constructor() {
     super();
     this.onClick = this.onClick.bind(this);
-    this.state = { iter: 0 };
+    this.state = { iter: 0, show: false };
+  }
+
+  componentDidMount() {
+    setTimeout(this.random(), 1000);
+  }
+
+  random() {
+    this.setState({
+      show: true,
+    });
   }
   onClick() {
     this.setState({
@@ -42,8 +52,9 @@ class ChartSG extends Component {
     return (
       <div
         style={{
-          width: '50%',
-          height: '500px',
+          width: '100%',
+          height: '100%',
+          display: this.state.show ? 'block' : 'none',
         }}
       >
         <SolidGauge
